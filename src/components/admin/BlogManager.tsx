@@ -89,46 +89,50 @@ export default function BlogManager() {
 
   return (
     <div>
-      <div className="mb-6 flex justify-between items-center">
-        <h2 className="text-2xl font-bold text-black">Manage Blog Posts</h2>
-        <Button onClick={() => { setIsEditing(true); setCurrentBlog({ tags: [], published: false, content: '' }); }}>
-          <Plus className="w-4 h-4 mr-2" />
+      <div className="mb-4 flex justify-between items-center">
+        <h2 className="text-lg font-semibold text-black">Manage Blog Posts</h2>
+        <Button size="sm" onClick={() => { setIsEditing(true); setCurrentBlog({ tags: [], published: false, content: '' }); }}>
+          <Plus className="w-3 h-3 mr-1.5" />
           Add Blog Post
         </Button>
       </div>
 
       {isEditing && (
-        <Card className="mb-6 bg-white">
-          <CardHeader>
-            <CardTitle>{currentBlog.id ? 'Edit' : 'Add'} Blog Post</CardTitle>
+        <Card className="mb-4 bg-white">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm">{currentBlog.id ? 'Edit' : 'Add'} Blog Post</CardTitle>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-3">
               <Input
+                className="h-8 text-sm"
                 placeholder="Title"
                 value={currentBlog.title || ''}
                 onChange={(e) => setCurrentBlog({ ...currentBlog, title: e.target.value })}
                 required
               />
               <Input
+                className="h-8 text-sm"
                 placeholder="Slug (auto-generated from title if empty)"
                 value={currentBlog.slug || ''}
                 onChange={(e) => setCurrentBlog({ ...currentBlog, slug: e.target.value })}
               />
               <Textarea
+                className="text-sm"
                 placeholder="Excerpt (short description)"
                 value={currentBlog.excerpt || ''}
                 onChange={(e) => setCurrentBlog({ ...currentBlog, excerpt: e.target.value })}
                 rows={2}
               />
               <Input
+                className="h-8 text-sm"
                 placeholder="Featured Image URL"
                 value={currentBlog.image || ''}
                 onChange={(e) => setCurrentBlog({ ...currentBlog, image: e.target.value })}
               />
               
               <div>
-                <label className="block text-sm font-medium mb-2">Content</label>
+                <label className="block text-xs font-medium mb-1.5">Content</label>
                 <RichTextEditor
                   content={currentBlog.content || ''}
                   onChange={(content) => setCurrentBlog({ ...currentBlog, content })}
@@ -138,12 +142,13 @@ export default function BlogManager() {
               <div>
                 <div className="flex gap-2 mb-2">
                   <Input
+                    className="h-8 text-sm"
                     placeholder="Add tag"
                     value={tagInput}
                     onChange={(e) => setTagInput(e.target.value)}
                     onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addTag())}
                   />
-                  <Button type="button" onClick={addTag}>Add Tag</Button>
+                  <Button type="button" size="sm" onClick={addTag}>Add Tag</Button>
                 </div>
                 <div className="flex flex-wrap gap-2">
                   {currentBlog.tags?.map((tag, i) => (
@@ -160,16 +165,16 @@ export default function BlogManager() {
                   id="published"
                   checked={currentBlog.published || false}
                   onChange={(e) => setCurrentBlog({ ...currentBlog, published: e.target.checked })}
-                  className="w-4 h-4"
+                  className="w-3.5 h-3.5"
                 />
-                <label htmlFor="published" className="text-sm font-medium">
+                <label htmlFor="published" className="text-xs font-medium">
                   Publish this post
                 </label>
               </div>
 
               <div className="flex gap-2">
-                <Button type="submit">Save</Button>
-                <Button type="button" variant="outline" onClick={() => { setIsEditing(false); setCurrentBlog({ tags: [], published: false, content: '' }); }}>
+                <Button type="submit" size="sm">Save</Button>
+                <Button type="button" size="sm" variant="outline" onClick={() => { setIsEditing(false); setCurrentBlog({ tags: [], published: false, content: '' }); }}>
                   Cancel
                 </Button>
               </div>
@@ -178,38 +183,38 @@ export default function BlogManager() {
         </Card>
       )}
 
-      <div className="grid gap-4">
+      <div className="grid gap-3">
         {blogs.map((blog) => (
           <Card key={blog.id} className="bg-white">
-            <CardContent className="pt-6">
-              <div className="flex justify-between items-start mb-3">
+            <CardContent className="pt-4">
+              <div className="flex justify-between items-start mb-2">
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-1">
-                    <h3 className="text-xl font-bold text-black">{blog.title}</h3>
+                    <h3 className="text-sm font-semibold text-black">{blog.title}</h3>
                     {blog.published && (
-                      <Badge variant="default" className="text-xs">Published</Badge>
+                      <Badge variant="default" className="text-xs h-5">Published</Badge>
                     )}
                     {!blog.published && (
-                      <Badge variant="secondary" className="text-xs">Draft</Badge>
+                      <Badge variant="secondary" className="text-xs h-5">Draft</Badge>
                     )}
                   </div>
-                  <p className="text-sm text-gray-500">/{blog.slug}</p>
+                  <p className="text-xs text-gray-500">/{blog.slug}</p>
                 </div>
-                <div className="flex gap-2">
-                  <Button variant="outline" size="icon" onClick={() => handleEdit(blog)}>
-                    <Edit className="w-4 h-4" />
+                <div className="flex gap-1.5">
+                  <Button variant="outline" size="sm" className="h-7 w-7 p-0" onClick={() => handleEdit(blog)}>
+                    <Edit className="w-3 h-3" />
                   </Button>
-                  <Button variant="outline" size="icon" onClick={() => handleDelete(blog.id)}>
-                    <Trash className="w-4 h-4" />
+                  <Button variant="outline" size="sm" className="h-7 w-7 p-0" onClick={() => handleDelete(blog.id)}>
+                    <Trash className="w-3 h-3" />
                   </Button>
                 </div>
               </div>
               {blog.excerpt && (
-                <p className="text-gray-700 mb-2">{blog.excerpt}</p>
+                <p className="text-xs text-gray-700 mb-2">{blog.excerpt}</p>
               )}
-              <div className="flex flex-wrap gap-2 mb-2">
+              <div className="flex flex-wrap gap-1.5 mb-2">
                 {blog.tags.map((tag, i) => (
-                  <Badge key={i} variant="secondary">{tag}</Badge>
+                  <Badge key={i} variant="secondary" className="text-xs h-5">{tag}</Badge>
                 ))}
               </div>
               <p className="text-xs text-gray-500">

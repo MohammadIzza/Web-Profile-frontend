@@ -74,45 +74,50 @@ export default function ExperienceManager() {
 
   return (
     <div>
-      <div className="mb-6 flex justify-between items-center">
-        <h2 className="text-2xl font-bold text-black">Manage Experience</h2>
-        <Button onClick={() => { setIsEditing(true); setCurrentExperience({ current: false }); }}>
-          <Plus className="w-4 h-4 mr-2" />
+      <div className="mb-4 flex justify-between items-center">
+        <h2 className="text-lg font-semibold text-black">Manage Experience</h2>
+        <Button size="sm" onClick={() => { setIsEditing(true); setCurrentExperience({ current: false }); }}>
+          <Plus className="w-3 h-3 mr-1.5" />
           Add Experience
         </Button>
       </div>
 
       {isEditing && (
-        <Card className="mb-6 bg-white">
-          <CardHeader>
-            <CardTitle>{currentExperience.id ? 'Edit' : 'Add'} Experience</CardTitle>
+        <Card className="mb-4 bg-white">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm">{currentExperience.id ? 'Edit' : 'Add'} Experience</CardTitle>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-3">
               <Input
+                className="h-8 text-sm"
                 placeholder="Company"
                 value={currentExperience.company || ''}
                 onChange={(e) => setCurrentExperience({ ...currentExperience, company: e.target.value })}
                 required
               />
               <Input
+                className="h-8 text-sm"
                 placeholder="Position"
                 value={currentExperience.position || ''}
                 onChange={(e) => setCurrentExperience({ ...currentExperience, position: e.target.value })}
                 required
               />
               <Textarea
+                className="text-sm"
                 placeholder="Description"
                 value={currentExperience.description || ''}
                 onChange={(e) => setCurrentExperience({ ...currentExperience, description: e.target.value })}
                 required
               />
               <Input
+                className="h-8 text-sm"
                 placeholder="Location"
                 value={currentExperience.location || ''}
                 onChange={(e) => setCurrentExperience({ ...currentExperience, location: e.target.value })}
               />
               <Input
+                className="h-8 text-sm"
                 type="date"
                 placeholder="Start Date"
                 value={currentExperience.startDate || ''}
@@ -126,7 +131,7 @@ export default function ExperienceManager() {
                   id="current"
                   checked={currentExperience.current || false}
                   onChange={(e) => setCurrentExperience({ ...currentExperience, current: e.target.checked })}
-                  className="w-4 h-4"
+                  className="w-3.5 h-3.5"
                 />
                 <label htmlFor="current" className="text-sm font-medium">Currently working here</label>
               </div>

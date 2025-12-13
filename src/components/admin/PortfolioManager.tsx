@@ -78,44 +78,49 @@ export default function PortfolioManager() {
 
   return (
     <div>
-      <div className="mb-6 flex justify-between items-center">
-        <h2 className="text-2xl font-bold text-black">Manage Portfolio</h2>
-        <Button onClick={() => { setIsEditing(true); setCurrentPortfolio({ tags: [] }); }}>
-          <Plus className="w-4 h-4 mr-2" />
+      <div className="mb-4 flex justify-between items-center">
+        <h2 className="text-lg font-semibold text-black">Manage Portfolio</h2>
+        <Button size="sm" onClick={() => { setIsEditing(true); setCurrentPortfolio({ tags: [] }); }}>
+          <Plus className="w-3 h-3 mr-1.5" />
           Add Portfolio
         </Button>
       </div>
 
       {isEditing && (
-        <Card className="mb-6 bg-white">
-          <CardHeader>
-            <CardTitle>{currentPortfolio.id ? 'Edit' : 'Add'} Portfolio</CardTitle>
+        <Card className="mb-4 bg-white">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm">{currentPortfolio.id ? 'Edit' : 'Add'} Portfolio</CardTitle>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-3">
               <Input
+                className="h-8 text-sm"
                 placeholder="Title"
                 value={currentPortfolio.title || ''}
                 onChange={(e) => setCurrentPortfolio({ ...currentPortfolio, title: e.target.value })}
                 required
               />
               <Textarea
+                className="text-sm"
                 placeholder="Description"
                 value={currentPortfolio.description || ''}
                 onChange={(e) => setCurrentPortfolio({ ...currentPortfolio, description: e.target.value })}
                 required
               />
               <Input
+                className="h-8 text-sm"
                 placeholder="Image URL"
                 value={currentPortfolio.image || ''}
                 onChange={(e) => setCurrentPortfolio({ ...currentPortfolio, image: e.target.value })}
               />
               <Input
+                className="h-8 text-sm"
                 placeholder="Project Link"
                 value={currentPortfolio.link || ''}
                 onChange={(e) => setCurrentPortfolio({ ...currentPortfolio, link: e.target.value })}
               />
               <Input
+                className="h-8 text-sm"
                 placeholder="GitHub URL"
                 value={currentPortfolio.github || ''}
                 onChange={(e) => setCurrentPortfolio({ ...currentPortfolio, github: e.target.value })}
@@ -124,16 +129,17 @@ export default function PortfolioManager() {
               <div>
                 <div className="flex gap-2 mb-2">
                   <Input
+                    className="h-8 text-sm"
                     placeholder="Add tag"
                     value={tagInput}
                     onChange={(e) => setTagInput(e.target.value)}
                     onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addTag())}
                   />
-                  <Button type="button" onClick={addTag}>Add</Button>
+                  <Button type="button" size="sm" onClick={addTag}>Add</Button>
                 </div>
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-1.5">
                   {currentPortfolio.tags?.map((tag, i) => (
-                    <Badge key={i} variant="secondary" className="cursor-pointer" onClick={() => removeTag(i)}>
+                    <Badge key={i} variant="secondary" className="cursor-pointer text-xs h-5" onClick={() => removeTag(i)}>
                       {tag} ×
                     </Badge>
                   ))}
@@ -141,8 +147,8 @@ export default function PortfolioManager() {
               </div>
 
               <div className="flex gap-2">
-                <Button type="submit">Save</Button>
-                <Button type="button" variant="outline" onClick={() => { setIsEditing(false); setCurrentPortfolio({ tags: [] }); }}>
+                <Button type="submit" size="sm">Save</Button>
+                <Button type="button" size="sm" variant="outline" onClick={() => { setIsEditing(false); setCurrentPortfolio({ tags: [] }); }}>
                   Cancel
                 </Button>
               </div>
@@ -151,25 +157,25 @@ export default function PortfolioManager() {
         </Card>
       )}
 
-      <div className="grid md:grid-cols-2 gap-4">
+      <div className="grid md:grid-cols-2 gap-3">
         {portfolios.map((portfolio) => (
           <Card key={portfolio.id} className="bg-white">
-            <CardContent className="pt-6">
+            <CardContent className="pt-4">
               <div className="flex justify-between items-start mb-2">
-                <h3 className="text-xl font-bold text-black">{portfolio.title}</h3>
-                <div className="flex gap-2">
-                  <Button variant="outline" size="icon" onClick={() => handleEdit(portfolio)}>
-                    <Edit className="w-4 h-4" />
+                <h3 className="text-sm font-semibold text-black">{portfolio.title}</h3>
+                <div className="flex gap-1.5">
+                  <Button variant="outline" size="sm" className="h-7 w-7 p-0" onClick={() => handleEdit(portfolio)}>
+                    <Edit className="w-3 h-3" />
                   </Button>
-                  <Button variant="outline" size="icon" onClick={() => handleDelete(portfolio.id)}>
-                    <Trash className="w-4 h-4" />
+                  <Button variant="outline" size="sm" className="h-7 w-7 p-0" onClick={() => handleDelete(portfolio.id)}>
+                    <Trash className="w-3 h-3" />
                   </Button>
                 </div>
               </div>
-              <p className="text-gray-700 mb-2">{portfolio.description}</p>
-              <div className="flex flex-wrap gap-2">
+              <p className="text-xs text-gray-700 mb-2">{portfolio.description}</p>
+              <div className="flex flex-wrap gap-1.5">
                 {portfolio.tags.map((tag, i) => (
-                  <Badge key={i} variant="secondary">{tag}</Badge>
+                  <Badge key={i} variant="secondary" className="text-xs h-5">{tag}</Badge>
                 ))}
               </div>
             </CardContent>

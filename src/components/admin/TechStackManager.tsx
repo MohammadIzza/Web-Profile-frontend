@@ -68,34 +68,37 @@ export default function TechStackManager() {
 
   return (
     <div>
-      <div className="mb-6 flex justify-between items-center">
-        <h2 className="text-2xl font-bold text-black">Manage Tech Stack</h2>
-        <Button onClick={() => { setIsEditing(true); setCurrentTechStack({ level: 'intermediate' }); }}>
-          <Plus className="w-4 h-4 mr-2" />
+      <div className="mb-4 flex justify-between items-center">
+        <h2 className="text-lg font-semibold text-black">Manage Tech Stack</h2>
+        <Button size="sm" onClick={() => { setIsEditing(true); setCurrentTechStack({ level: 'intermediate' }); }}>
+          <Plus className="w-3 h-3 mr-1.5" />
           Add Tech Stack
         </Button>
       </div>
 
       {isEditing && (
-        <Card className="mb-6 bg-white">
-          <CardHeader>
-            <CardTitle>{currentTechStack.id ? 'Edit' : 'Add'} Tech Stack</CardTitle>
+        <Card className="mb-4 bg-white">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm">{currentTechStack.id ? 'Edit' : 'Add'} Tech Stack</CardTitle>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-3">
               <Input
+                className="h-8 text-sm"
                 placeholder="Technology Name"
                 value={currentTechStack.name || ''}
                 onChange={(e) => setCurrentTechStack({ ...currentTechStack, name: e.target.value })}
                 required
               />
               <Input
+                className="h-8 text-sm"
                 placeholder="Category (e.g., Frontend, Backend, Database)"
                 value={currentTechStack.category || ''}
                 onChange={(e) => setCurrentTechStack({ ...currentTechStack, category: e.target.value })}
                 required
               />
               <Input
+                className="h-8 text-sm"
                 placeholder="Icon URL or Emoji"
                 value={currentTechStack.icon || ''}
                 onChange={(e) => setCurrentTechStack({ ...currentTechStack, icon: e.target.value })}
@@ -105,7 +108,7 @@ export default function TechStackManager() {
                 value={currentTechStack.level || 'intermediate'}
                 onValueChange={(value) => setCurrentTechStack({ ...currentTechStack, level: value })}
               >
-                <SelectTrigger>
+                <SelectTrigger className="h-8 text-sm">
                   <SelectValue placeholder="Select level" />
                 </SelectTrigger>
                 <SelectContent>
@@ -117,8 +120,8 @@ export default function TechStackManager() {
               </Select>
 
               <div className="flex gap-2">
-                <Button type="submit">Save</Button>
-                <Button type="button" variant="outline" onClick={() => { setIsEditing(false); setCurrentTechStack({ level: 'intermediate' }); }}>
+                <Button type="submit" size="sm">Save</Button>
+                <Button type="button" size="sm" variant="outline" onClick={() => { setIsEditing(false); setCurrentTechStack({ level: 'intermediate' }); }}>
                   Cancel
                 </Button>
               </div>

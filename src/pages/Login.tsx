@@ -71,9 +71,6 @@ export default function Login() {
             <Button type="submit" className="w-full" disabled={loading}>
               {loading ? 'Logging in...' : 'Login'}
             </Button>
-            <div className="text-xs text-gray-500 dark:text-gray-400 text-center mt-4">
-              Default credentials: admin / admin123
-            </div>
           </form>
         </CardContent>
       </Card>
