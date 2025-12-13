@@ -28,6 +28,7 @@ import { TaskItem } from '@tiptap/extension-task-item';
 import { HorizontalRule } from '@tiptap/extension-horizontal-rule';
 import { Youtube } from '@tiptap/extension-youtube';
 import { CodeBlockLowlight } from '@tiptap/extension-code-block-lowlight';
+import { API_BASE_URL } from '../constants';
 import { common, createLowlight } from 'lowlight';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -232,15 +233,22 @@ export default function RichTextEditor({ content, onChange }: RichTextEditorProp
     try {
       const formData = new FormData();
       formData.append('file', file);
+      
+      const token = localStorage.getItem('admin_token');
+      const headers: HeadersInit = {};
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
 
-      const response = await fetch('http://localhost:3001/api/upload', {
+      const response = await fetch(`${API_BASE_URL}/api/upload`, {
         method: 'POST',
+        headers,
         body: formData,
       });
 
       const data = await response.json();
       if (data.url) {
-        const fullUrl = `http://localhost:3001${data.url}`;
+        const fullUrl = `${API_BASE_URL}${data.url}`;
         editor?.chain().focus().setImage({ 
           src: fullUrl,
           alt: '',

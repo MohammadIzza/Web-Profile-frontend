@@ -13,9 +13,10 @@ export const API_ENDPOINTS = {
   EXPERIENCE: '/api/experience',
   TECHSTACK: '/api/techstack',
   UPLOAD: '/api/upload',
-} as const;
-
-export const AUTH = {
-  USERNAME: 'admin',
-  PASSWORD: 'admin123',
+  AUTH: {
+    LOGIN: '/api/auth/login',
+    REFRESH: '/api/auth/refresh',
+    ME: '/api/auth/me',
+    CHANGE_PASSWORD: '/api/auth/change-password',
+  },
 } as const;

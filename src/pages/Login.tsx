@@ -19,12 +19,12 @@ export default function Login() {
     setError('');
     setLoading(true);
 
-    const success = await login(username, password);
+    const result = await login(username, password);
     
-    if (success) {
+    if (result.success) {
       navigate('/admin');
     } else {
-      setError('Invalid username or password');
+      setError(result.error || 'Invalid username or password');
     }
     
     setLoading(false);

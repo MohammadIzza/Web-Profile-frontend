@@ -7,6 +7,15 @@ import PortfolioManager from '../components/admin/PortfolioManager';
 import BlogManager from '../components/admin/BlogManager';
 import ExperienceManager from '../components/admin/ExperienceManager';
 import TechStackManager from '../components/admin/TechStackManager';
+import ChangePasswordDialog from '../components/admin/ChangePasswordDialog';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import {
   User,
   Briefcase,
@@ -17,13 +26,17 @@ import {
   Menu,
   X,
   LayoutDashboard,
+  KeyRound,
+  ChevronDown,
+  UserCircle,
 } from 'lucide-react';
 
 export default function Admin() {
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('dashboard');
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [changePasswordOpen, setChangePasswordOpen] = useState(false);
 
   const handleLogout = () => {
     logout();
@@ -150,20 +163,6 @@ export default function Admin() {
             );
           })}
         </nav>
-
-        {/* Logout Button */}
-        <div className="p-2 border-t border-gray-200">
-          <Button
-            variant="ghost"
-            onClick={handleLogout}
-            className={`w-full flex items-center gap-2 text-xs text-gray-700 hover:bg-gray-100 h-9 ${
-              !sidebarOpen && 'justify-center px-0'
-            }`}
-          >
-            <LogOut className="h-4 w-4" />
-            {sidebarOpen && <span>Logout</span>}
-          </Button>
-        </div>
       </aside>
 
       {/* Main Content */}
@@ -179,12 +178,59 @@ export default function Admin() {
                 Manage your {activeTab === 'dashboard' ? 'content' : activeTab}
               </p>
             </div>
+            <div className="flex items-center gap-2">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="h-8 text-xs gap-1.5"
+                  >
+                    <UserCircle className="h-4 w-4" />
+                    <span className="font-medium">{user?.username}</span>
+                    <ChevronDown className="h-3 w-3 opacity-50" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-48">
+                  <DropdownMenuLabel className="font-normal">
+                    <div className="flex flex-col space-y-1">
+                      <p className="text-sm font-medium">{user?.username}</p>
+                      <p className="text-xs text-muted-foreground">
+                        {user?.email}
+                      </p>
+                    </div>
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    onClick={() => setChangePasswordOpen(true)}
+                    className="cursor-pointer"
+                  >
+                    <KeyRound className="mr-2 h-4 w-4" />
+                    <span>Change Password</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    onClick={handleLogout}
+                    className="cursor-pointer text-red-600 focus:text-red-600 focus:bg-red-50"
+                  >
+                    <LogOut className="mr-2 h-4 w-4" />
+                    <span>Logout</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
           </div>
         </header>
 
         {/* Content Area */}
         <div className="p-6">{renderContent()}</div>
       </main>
+
+      {/* Change Password Dialog */}
+      <ChangePasswordDialog
+        open={changePasswordOpen}
+        onOpenChange={setChangePasswordOpen}
+      />
     </div>
   );
 }

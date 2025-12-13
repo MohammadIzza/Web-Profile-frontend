@@ -4,6 +4,8 @@ import Admin from './pages/Admin';
 import Login from './pages/Login';
 import ProtectedRoute from './components/ProtectedRoute';
 import { AuthProvider } from './contexts/AuthContext';
+import { Toaster } from '@/components/ui/toaster';
+import { Toaster as Sonner } from '@/components/ui/sonner';
 
 function App() {
   return (
@@ -22,6 +24,8 @@ function App() {
           />
         </Routes>
       </BrowserRouter>
+      <Toaster />
+      <Sonner />
     </AuthProvider>
   );
 }

@@ -1,15 +1,20 @@
 import { useEffect, useState } from 'react';
 import { profileApi, portfolioApi, blogApi } from '../services/api';
 import type { Profile, Portfolio, Blog } from '../types';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Github, Linkedin, Twitter, Mail, MapPin, ExternalLink } from 'lucide-react';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Separator } from '@/components/ui/separator';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { Github, Linkedin, Twitter, Mail, MapPin, ExternalLink, Calendar } from 'lucide-react';
 
 export default function Home() {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [portfolios, setPortfolios] = useState<Portfolio[]>([]);
   const [blogs, setBlogs] = useState<Blog[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     loadData();
@@ -17,6 +22,7 @@ export default function Home() {
 
   const loadData = async () => {
     try {
+      setLoading(true);
       const [profileRes, portfolioRes, blogRes] = await Promise.all([
         profileApi.getAll(),
         portfolioApi.getAll(),
@@ -30,174 +36,401 @@ export default function Home() {
       setBlogs(blogRes.data.filter((b: Blog) => b.published).slice(0, 3));
     } catch (error) {
       console.error('Error loading data:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-white">
-      {/* Header/Navigation */}
-      <header className="border-b border-gray-200 sticky top-0 bg-white z-10">
-        <div className="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
-          <h1 className="text-lg font-semibold text-black">{profile?.name || 'Portfolio'}</h1>
-          <nav className="flex gap-6 text-sm">
-            <a href="#projects" className="text-gray-700 hover:text-black transition">Projects</a>
-            <a href="#blog" className="text-gray-700 hover:text-black transition">Blog</a>
-            <a href="#contact" className="text-gray-700 hover:text-black transition">Contact</a>
-          </nav>
-        </div>
-      </header>
+    <TooltipProvider>
+      <div className="min-h-screen bg-white">
+        {/* Header/Navigation */}
+        <header className="border-b border-gray-200 sticky top-0 bg-white z-10 backdrop-blur-sm bg-white/90">
+          <div className="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+            <div className="flex items-center gap-3">
+              {loading ? (
+                <Skeleton className="h-8 w-8 rounded-full" />
+              ) : profile?.avatar ? (
+                <Avatar className="h-8 w-8">
+                  <AvatarImage src={profile.avatar} alt={profile.name} />
+                  <AvatarFallback>{profile.name?.charAt(0) || 'P'}</AvatarFallback>
+                </Avatar>
+              ) : null}
+              <h1 className="text-lg font-semibold text-black">
+                {loading ? <Skeleton className="h-5 w-24" /> : profile?.name || 'Portfolio'}
+              </h1>
+            </div>
+            <nav className="flex gap-6 text-sm">
+              <a href="#projects" className="text-gray-700 hover:text-black transition">Projects</a>
+              <a href="#blog" className="text-gray-700 hover:text-black transition">Blog</a>
+              <a href="#contact" className="text-gray-700 hover:text-black transition">Contact</a>
+            </nav>
+          </div>
+        </header>
 
-      {/* Hero Section */}
-      <section className="border-b py-12 px-4">
-        <div className="max-w-4xl mx-auto">
-          {profile && (
-            <div className="text-center">
-              <h2 className="text-3xl font-bold text-black mb-2">{profile.name}</h2>
-              <p className="text-base text-gray-600 mb-3">{profile.title}</p>
-              <p className="text-sm text-gray-700 max-w-2xl mx-auto mb-4 leading-relaxed">{profile.bio}</p>
-              
-              <div className="flex items-center justify-center gap-6 mb-4 text-xs text-gray-600">
-                {profile.email && (
-                  <div className="flex items-center gap-1.5">
-                    <Mail className="w-3.5 h-3.5" />
-                    <span>{profile.email}</span>
-                  </div>
-                )}
-                {profile.location && (
-                  <div className="flex items-center gap-1.5">
-                    <MapPin className="w-3.5 h-3.5" />
-                    <span>{profile.location}</span>
-                  </div>
-                )}
+        {/* Hero Section */}
+        <section className="border-b py-16 px-4">
+          <div className="max-w-4xl mx-auto">
+            {loading ? (
+              <div className="text-center space-y-4">
+                <Skeleton className="h-12 w-64 mx-auto" />
+                <Skeleton className="h-6 w-48 mx-auto" />
+                <Skeleton className="h-20 w-full max-w-2xl mx-auto" />
+                <div className="flex justify-center gap-2">
+                  <Skeleton className="h-8 w-8 rounded-md" />
+                  <Skeleton className="h-8 w-8 rounded-md" />
+                  <Skeleton className="h-8 w-8 rounded-md" />
+                </div>
               </div>
+            ) : profile ? (
+              <div className="text-center">
+                {profile.avatar && (
+                  <Avatar className="h-24 w-24 mx-auto mb-4">
+                    <AvatarImage src={profile.avatar} alt={profile.name} />
+                    <AvatarFallback className="text-2xl">{profile.name?.charAt(0) || 'P'}</AvatarFallback>
+                  </Avatar>
+                )}
+                <h2 className="text-4xl font-bold text-black mb-2">{profile.name}</h2>
+                <p className="text-lg text-gray-600 mb-3">{profile.title}</p>
+                <Separator className="my-4 max-w-xs mx-auto" />
+                <p className="text-sm text-gray-700 max-w-2xl mx-auto mb-6 leading-relaxed">{profile.bio}</p>
+                
+                <div className="flex items-center justify-center gap-6 mb-6 text-xs text-gray-600">
+                  {profile.email && (
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <div className="flex items-center gap-1.5 cursor-pointer hover:text-black transition">
+                          <Mail className="w-4 h-4" />
+                          <span>{profile.email}</span>
+                        </div>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Send me an email</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  )}
+                  {profile.location && (
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <div className="flex items-center gap-1.5 cursor-pointer">
+                          <MapPin className="w-4 h-4" />
+                          <span>{profile.location}</span>
+                        </div>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Location</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  )}
+                </div>
 
-              <div className="flex justify-center gap-2">
+                <div className="flex justify-center gap-2">
+                  {profile.github && (
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button variant="outline" size="sm" className="h-9 w-9 p-0" asChild>
+                          <a href={profile.github} target="_blank" rel="noopener noreferrer">
+                            <Github className="w-4 h-4" />
+                          </a>
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>GitHub Profile</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  )}
+                  {profile.linkedin && (
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button variant="outline" size="sm" className="h-9 w-9 p-0" asChild>
+                          <a href={profile.linkedin} target="_blank" rel="noopener noreferrer">
+                            <Linkedin className="w-4 h-4" />
+                          </a>
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>LinkedIn Profile</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  )}
+                  {profile.twitter && (
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button variant="outline" size="sm" className="h-9 w-9 p-0" asChild>
+                          <a href={profile.twitter} target="_blank" rel="noopener noreferrer">
+                            <Twitter className="w-4 h-4" />
+                          </a>
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Twitter Profile</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  )}
+                </div>
+              </div>
+            ) : null}
+          </div>
+        </section>
+
+        {/* Portfolio Section */}
+        <section id="projects" className="py-16 px-4 bg-gray-50">
+          <div className="max-w-6xl mx-auto">
+            <div className="mb-8">
+              <h3 className="text-2xl font-semibold text-black mb-2">Featured Projects</h3>
+              <p className="text-sm text-gray-600">Check out some of my recent work</p>
+            </div>
+            {loading ? (
+              <div className="grid md:grid-cols-3 gap-6">
+                {[1, 2, 3].map((i) => (
+                  <Card key={i} className="bg-white">
+                    <CardHeader>
+                      <Skeleton className="h-5 w-3/4" />
+                    </CardHeader>
+                    <CardContent className="space-y-3">
+                      <Skeleton className="h-16 w-full" />
+                      <div className="flex gap-2">
+                        <Skeleton className="h-5 w-16" />
+                        <Skeleton className="h-5 w-16" />
+                        <Skeleton className="h-5 w-16" />
+                      </div>
+                      <div className="flex gap-2">
+                        <Skeleton className="h-7 w-20" />
+                        <Skeleton className="h-7 w-20" />
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            ) : (
+              <div className="grid md:grid-cols-3 gap-6">
+                {portfolios.map((portfolio) => (
+                  <Card key={portfolio.id} className="bg-white border-gray-200 hover:shadow-lg transition-shadow duration-300 group">
+                    {portfolio.image && (
+                      <div className="h-48 overflow-hidden rounded-t-lg">
+                        <img 
+                          src={portfolio.image} 
+                          alt={portfolio.title}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        />
+                      </div>
+                    )}
+                    <CardHeader className="pb-3">
+                      <CardTitle className="text-base font-semibold text-black">{portfolio.title}</CardTitle>
+                      {portfolio.description && (
+                        <CardDescription className="text-xs text-gray-600 line-clamp-2">
+                          {portfolio.description}
+                        </CardDescription>
+                      )}
+                    </CardHeader>
+                    <CardContent>
+                      <div className="flex flex-wrap gap-1.5 mb-4">
+                        {portfolio.tags.map((tag, i) => (
+                          <Badge key={i} variant="secondary" className="text-xs h-6 px-2">
+                            {tag}
+                          </Badge>
+                        ))}
+                      </div>
+                      <Separator className="mb-4" />
+                      <div className="flex gap-2">
+                        {portfolio.link && (
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Button variant="outline" size="sm" className="h-8 text-xs flex-1" asChild>
+                                <a href={portfolio.link} target="_blank" rel="noopener noreferrer">
+                                  <ExternalLink className="w-3.5 h-3.5 mr-1" />
+                                  Demo
+                                </a>
+                              </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>View live demo</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        )}
+                        {portfolio.github && (
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Button variant="outline" size="sm" className="h-8 text-xs flex-1" asChild>
+                                <a href={portfolio.github} target="_blank" rel="noopener noreferrer">
+                                  <Github className="w-3.5 h-3.5 mr-1" />
+                                  Code
+                                </a>
+                              </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>View source code</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        )}
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            )}
+          </div>
+        </section>
+
+        {/* Blog Section */}
+        <section id="blog" className="py-16 px-4">
+          <div className="max-w-6xl mx-auto">
+            <div className="mb-8">
+              <h3 className="text-2xl font-semibold text-black mb-2">Latest Blog Posts</h3>
+              <p className="text-sm text-gray-600">Thoughts, tutorials, and insights</p>
+            </div>
+            {loading ? (
+              <div className="grid md:grid-cols-3 gap-6">
+                {[1, 2, 3].map((i) => (
+                  <Card key={i} className="bg-white">
+                    <CardHeader>
+                      <Skeleton className="h-5 w-3/4 mb-2" />
+                      <Skeleton className="h-4 w-1/2" />
+                    </CardHeader>
+                    <CardContent className="space-y-3">
+                      <Skeleton className="h-16 w-full" />
+                      <div className="flex gap-2">
+                        <Skeleton className="h-5 w-16" />
+                        <Skeleton className="h-5 w-16" />
+                      </div>
+                      <Skeleton className="h-7 w-24" />
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            ) : (
+              <div className="grid md:grid-cols-3 gap-6">
+                {blogs.map((blog) => (
+                  <Card key={blog.id} className="bg-white border-gray-200 hover:shadow-lg transition-shadow duration-300 group">
+                    {blog.coverImage && (
+                      <div className="h-40 overflow-hidden rounded-t-lg">
+                        <img 
+                          src={blog.coverImage} 
+                          alt={blog.title}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        />
+                      </div>
+                    )}
+                    <CardHeader className="pb-3">
+                      <div className="flex items-center gap-2 text-xs text-gray-500 mb-2">
+                        <Calendar className="w-3.5 h-3.5" />
+                        <span>{new Date(blog.createdAt).toLocaleDateString()}</span>
+                      </div>
+                      <CardTitle className="text-base font-semibold text-black line-clamp-2 group-hover:text-blue-600 transition-colors">
+                        {blog.title}
+                      </CardTitle>
+                      {blog.excerpt && (
+                        <CardDescription className="text-xs text-gray-600 line-clamp-3 mt-2">
+                          {blog.excerpt}
+                        </CardDescription>
+                      )}
+                    </CardHeader>
+                    <CardContent>
+                      <div className="flex flex-wrap gap-1.5 mb-4">
+                        {blog.tags.slice(0, 3).map((tag, i) => (
+                          <Badge key={i} variant="outline" className="text-xs h-6 px-2">
+                            {tag}
+                          </Badge>
+                        ))}
+                      </div>
+                      <Separator className="mb-4" />
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        className="h-8 text-xs w-full group-hover:bg-gray-100"
+                      >
+                        Read More →
+                      </Button>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            )}
+          </div>
+        </section>
+
+        {/* Footer */}
+        <footer id="contact" className="border-t border-gray-200 py-12 px-4 bg-gray-50">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-8">
+              <h3 className="text-2xl font-semibold text-black mb-2">Get In Touch</h3>
+              <p className="text-sm text-gray-600">Feel free to reach out for collaborations or just a friendly hello</p>
+            </div>
+            
+            <Separator className="mb-8" />
+            
+            {profile && (
+              <div className="flex justify-center gap-4 mb-8">
                 {profile.github && (
-                  <Button variant="outline" size="sm" className="h-8 w-8 p-0" asChild>
-                    <a href={profile.github} target="_blank" rel="noopener noreferrer">
-                      <Github className="w-3.5 h-3.5" />
-                    </a>
-                  </Button>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button variant="outline" size="sm" className="h-10 w-10 p-0" asChild>
+                        <a href={profile.github} target="_blank" rel="noopener noreferrer">
+                          <Github className="w-5 h-5" />
+                        </a>
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>GitHub</p>
+                    </TooltipContent>
+                  </Tooltip>
                 )}
                 {profile.linkedin && (
-                  <Button variant="outline" size="sm" className="h-8 w-8 p-0" asChild>
-                    <a href={profile.linkedin} target="_blank" rel="noopener noreferrer">
-                      <Linkedin className="w-3.5 h-3.5" />
-                    </a>
-                  </Button>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button variant="outline" size="sm" className="h-10 w-10 p-0" asChild>
+                        <a href={profile.linkedin} target="_blank" rel="noopener noreferrer">
+                          <Linkedin className="w-5 h-5" />
+                        </a>
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>LinkedIn</p>
+                    </TooltipContent>
+                  </Tooltip>
                 )}
                 {profile.twitter && (
-                  <Button variant="outline" size="sm" className="h-8 w-8 p-0" asChild>
-                    <a href={profile.twitter} target="_blank" rel="noopener noreferrer">
-                      <Twitter className="w-3.5 h-3.5" />
-                    </a>
-                  </Button>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button variant="outline" size="sm" className="h-10 w-10 p-0" asChild>
+                        <a href={profile.twitter} target="_blank" rel="noopener noreferrer">
+                          <Twitter className="w-5 h-5" />
+                        </a>
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Twitter</p>
+                    </TooltipContent>
+                  </Tooltip>
+                )}
+                {profile.email && (
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button variant="outline" size="sm" className="h-10 w-10 p-0" asChild>
+                        <a href={`mailto:${profile.email}`}>
+                          <Mail className="w-5 h-5" />
+                        </a>
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Email</p>
+                    </TooltipContent>
+                  </Tooltip>
                 )}
               </div>
+            )}
+            
+            <div className="text-center">
+              <p className="text-xs text-gray-600">
+                © {new Date().getFullYear()} {profile?.name || 'Portfolio'}. All rights reserved.
+              </p>
+              <p className="text-xs text-gray-500 mt-1">
+                Built with React, TypeScript, and Tailwind CSS
+              </p>
             </div>
-          )}
-        </div>
-      </section>
-
-      {/* Portfolio Section */}
-      <section id="projects" className="py-12 px-4 bg-gray-50">
-        <div className="max-w-6xl mx-auto">
-          <h3 className="text-xl font-semibold text-black mb-6">Featured Projects</h3>
-          <div className="grid md:grid-cols-3 gap-4">
-            {portfolios.map((portfolio) => (
-              <Card key={portfolio.id} className="bg-white border-gray-200 hover:shadow-md transition">
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-sm font-semibold text-black">{portfolio.title}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-xs text-gray-700 mb-3 line-clamp-3">{portfolio.description}</p>
-                  <div className="flex flex-wrap gap-1.5 mb-3">
-                    {portfolio.tags.map((tag, i) => (
-                      <Badge key={i} variant="secondary" className="text-xs h-5">{tag}</Badge>
-                    ))}
-                  </div>
-                  <div className="flex gap-2">
-                    {portfolio.link && (
-                      <Button variant="outline" size="sm" className="h-7 text-xs" asChild>
-                        <a href={portfolio.link} target="_blank" rel="noopener noreferrer">
-                          <ExternalLink className="w-3 h-3 mr-1" />
-                          View
-                        </a>
-                      </Button>
-                    )}
-                    {portfolio.github && (
-                      <Button variant="outline" size="sm" className="h-7 text-xs" asChild>
-                        <a href={portfolio.github} target="_blank" rel="noopener noreferrer">
-                          <Github className="w-3 h-3 mr-1" />
-                          Code
-                        </a>
-                      </Button>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
           </div>
-        </div>
-      </section>
-
-      {/* Blog Section */}
-      <section id="blog" className="py-12 px-4">
-        <div className="max-w-6xl mx-auto">
-          <h3 className="text-xl font-semibold text-black mb-6">Latest Blog Posts</h3>
-          <div className="grid md:grid-cols-3 gap-4">
-            {blogs.map((blog) => (
-              <Card key={blog.id} className="bg-white border-gray-200 hover:shadow-md transition">
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-sm font-semibold text-black line-clamp-2">{blog.title}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-xs text-gray-700 mb-3 line-clamp-3">{blog.excerpt}</p>
-                  <div className="flex flex-wrap gap-1.5 mb-3">
-                    {blog.tags.map((tag, i) => (
-                      <Badge key={i} variant="secondary" className="text-xs h-5">{tag}</Badge>
-                    ))}
-                  </div>
-                  <Button variant="outline" size="sm" className="h-7 text-xs">Read More</Button>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer id="contact" className="border-t border-gray-200 py-8 px-4 bg-gray-50">
-        <div className="max-w-6xl mx-auto text-center">
-          <p className="text-xs text-gray-600 mb-3">
-            © {new Date().getFullYear()} {profile?.name}. All rights reserved.
-          </p>
-          {profile && (
-            <div className="flex justify-center gap-4 mb-3">
-              {profile.github && (
-                <a href={profile.github} target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-black transition">
-                  <Github className="w-4 h-4" />
-                </a>
-              )}
-              {profile.linkedin && (
-                <a href={profile.linkedin} target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-black transition">
-                  <Linkedin className="w-4 h-4" />
-                </a>
-              )}
-              {profile.twitter && (
-                <a href={profile.twitter} target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-black transition">
-                  <Twitter className="w-4 h-4" />
-                </a>
-              )}
-              {profile.email && (
-                <a href={`mailto:${profile.email}`} className="text-gray-600 hover:text-black transition">
-                  <Mail className="w-4 h-4" />
-                </a>
-              )}
-            </div>
-          )}
-        </div>
-      </footer>
-    </div>
+        </footer>
+      </div>
+    </TooltipProvider>
   );
 }

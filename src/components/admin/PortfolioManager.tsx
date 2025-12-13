@@ -6,50 +6,73 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
-import { Plus, Edit, Trash } from 'lucide-react';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Separator } from '@/components/ui/separator';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { Plus, Edit, Trash, ExternalLink, Github, Calendar, Tag, Loader2 } from 'lucide-react';
+import { toast } from 'sonner';
 
 export default function PortfolioManager() {
   const [portfolios, setPortfolios] = useState<Portfolio[]>([]);
   const [isEditing, setIsEditing] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [currentPortfolio, setCurrentPortfolio] = useState<Partial<Portfolio>>({ tags: [] });
   const [tagInput, setTagInput] = useState('');
+  const [deleteDialog, setDeleteDialog] = useState<{ open: boolean; portfolio: Portfolio | null }>({ open: false, portfolio: null });
 
   useEffect(() => {
     loadPortfolios();
   }, []);
 
   const loadPortfolios = async () => {
+    setLoading(true);
     try {
       const response = await portfolioApi.getAll();
       setPortfolios(response.data);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error loading portfolios:', error);
+      toast.error('Failed to load portfolios');
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
     try {
       if (currentPortfolio.id) {
         await portfolioApi.update(currentPortfolio.id, currentPortfolio);
+        toast.success('Portfolio updated successfully!');
       } else {
         await portfolioApi.create(currentPortfolio);
+        toast.success('Portfolio created successfully!');
       }
       loadPortfolios();
       setIsEditing(false);
       setCurrentPortfolio({ tags: [] });
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error saving portfolio:', error);
+      const errorMessage = error.response?.data?.error || 'Failed to save portfolio';
+      toast.error(errorMessage);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const handleDelete = async (id: number) => {
-    if (window.confirm('Are you sure?')) {
+  const handleDelete = async () => {
+    if (deleteDialog.portfolio) {
+      setLoading(true);
       try {
-        await portfolioApi.delete(id);
+        await portfolioApi.delete(deleteDialog.portfolio.id);
+        toast.success('Portfolio deleted successfully!');
         loadPortfolios();
-      } catch (error) {
+        setDeleteDialog({ open: false, portfolio: null });
+      } catch (error: any) {
         console.error('Error deleting portfolio:', error);
+        toast.error('Failed to delete portfolio');
+      } finally {
+        setLoading(false);
       }
     }
   };
@@ -77,14 +100,26 @@ export default function PortfolioManager() {
   };
 
   return (
-    <div>
-      <div className="mb-4 flex justify-between items-center">
-        <h2 className="text-lg font-semibold text-black">Manage Portfolio</h2>
-        <Button size="sm" onClick={() => { setIsEditing(true); setCurrentPortfolio({ tags: [] }); }}>
-          <Plus className="w-3 h-3 mr-1.5" />
-          Add Portfolio
-        </Button>
-      </div>
+    <TooltipProvider>
+      <div>
+        <div className="mb-4">
+          <div className="flex justify-between items-center mb-2">
+            <div>
+              <h2 className="text-lg font-semibold text-black">Manage Portfolio</h2>
+              <p className="text-xs text-gray-500">Showcase your projects and work</p>
+            </div>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button size="sm" onClick={() => { setIsEditing(true); setCurrentPortfolio({ tags: [] }); }}>
+                  <Plus className="w-3 h-3 mr-1.5" />
+                  Add Portfolio
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>Add new portfolio item</TooltipContent>
+            </Tooltip>
+          </div>
+          <Separator />
+        </div>
 
       {isEditing && (
         <Card className="mb-4 bg-white">
@@ -164,15 +199,54 @@ export default function PortfolioManager() {
               <div className="flex justify-between items-start mb-2">
                 <h3 className="text-sm font-semibold text-black">{portfolio.title}</h3>
                 <div className="flex gap-1.5">
-                  <Button variant="outline" size="sm" className="h-7 w-7 p-0" onClick={() => handleEdit(portfolio)}>
-                    <Edit className="w-3 h-3" />
-                  </Button>
-                  <Button variant="outline" size="sm" className="h-7 w-7 p-0" onClick={() => handleDelete(portfolio.id)}>
-                    <Trash className="w-3 h-3" />
-                  </Button>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button variant="outline" size="sm" className="h-7 w-7 p-0" onClick={() => handleEdit(portfolio)}>
+                        <Edit className="w-3 h-3" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>Edit portfolio</TooltipContent>
+                  </Tooltip>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button variant="outline" size="sm" className="h-7 w-7 p-0 hover:bg-destructive hover:text-white" onClick={() => setDeleteDialog({ open: true, portfolio })}>
+                        <Trash className="w-3 h-3" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>Delete portfolio</TooltipContent>
+                  </Tooltip>
                 </div>
               </div>
               <p className="text-xs text-gray-700 mb-2">{portfolio.description}</p>
+              <Separator className="my-2" />
+              <div className="flex gap-2 mb-2">
+                {portfolio.link && (
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button variant="ghost" size="sm" className="h-6 px-2 text-xs" asChild>
+                        <a href={portfolio.link} target="_blank" rel="noopener noreferrer">
+                          <ExternalLink className="w-3 h-3 mr-1" />
+                          Demo
+                        </a>
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>View live demo</TooltipContent>
+                  </Tooltip>
+                )}
+                {portfolio.github && (
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button variant="ghost" size="sm" className="h-6 px-2 text-xs" asChild>
+                        <a href={portfolio.github} target="_blank" rel="noopener noreferrer">
+                          <Github className="w-3 h-3 mr-1" />
+                          Code
+                        </a>
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>View source code</TooltipContent>
+                  </Tooltip>
+                )}
+              </div>
               <div className="flex flex-wrap gap-1.5">
                 {portfolio.tags.map((tag, i) => (
                   <Badge key={i} variant="secondary" className="text-xs h-5">{tag}</Badge>
@@ -182,6 +256,28 @@ export default function PortfolioManager() {
           </Card>
         ))}
       </div>
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog open={deleteDialog.open} onOpenChange={(open) => setDeleteDialog({ open, portfolio: null })}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Delete Portfolio Item</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to delete "{deleteDialog.portfolio?.title}"? This action cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" size="sm" onClick={() => setDeleteDialog({ open: false, portfolio: null })}>
+              Cancel
+            </Button>
+            <Button variant="destructive" size="sm" onClick={handleDelete}>
+              <Trash className="w-3 h-3 mr-1.5" />
+              Delete
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
+    </TooltipProvider>
   );
 }

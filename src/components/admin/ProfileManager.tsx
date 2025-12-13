@@ -5,11 +5,13 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Plus, Edit, Trash } from 'lucide-react';
+import { Plus, Edit, Loader2 } from 'lucide-react';
+import { toast } from 'sonner';
 
 export default function ProfileManager() {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState<Partial<Profile>>({});
 
   useEffect(() => {
@@ -17,29 +19,40 @@ export default function ProfileManager() {
   }, []);
 
   const loadProfile = async () => {
+    setLoading(true);
     try {
       const response = await profileApi.getAll();
       if (response.data.length > 0) {
         setProfile(response.data[0]);
         setFormData(response.data[0]);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error loading profile:', error);
+      toast.error('Failed to load profile');
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
     try {
       if (profile?.id) {
         await profileApi.update(profile.id, formData);
+        toast.success('Profile updated successfully!');
       } else {
         await profileApi.create(formData);
+        toast.success('Profile created successfully!');
       }
       loadProfile();
       setIsEditing(false);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error saving profile:', error);
+      const errorMessage = error.response?.data?.error || 'Failed to save profile';
+      toast.error(errorMessage);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -151,8 +164,11 @@ export default function ProfileManager() {
                 />
               </div>
               <div className="flex gap-2 pt-2">
-                <Button type="submit" size="sm">Save Changes</Button>
-                <Button type="button" size="sm" variant="outline" onClick={handleCancel}>
+                <Button type="submit" size="sm" disabled={loading}>
+                  {loading && <Loader2 className="w-3 h-3 mr-1.5 animate-spin" />}
+                  Save Changes
+                </Button>
+                <Button type="button" size="sm" variant="outline" onClick={handleCancel} disabled={loading}>
                   Cancel
                 </Button>
               </div>

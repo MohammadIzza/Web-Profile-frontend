@@ -6,11 +6,13 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
-import { Plus, Edit, Trash } from 'lucide-react';
+import { Plus, Edit, Trash, Loader2 } from 'lucide-react';
+import { toast } from 'sonner';
 
 export default function ExperienceManager() {
   const [experiences, setExperiences] = useState<Experience[]>([]);
   const [isEditing, setIsEditing] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [currentExperience, setCurrentExperience] = useState<Partial<Experience>>({ current: false });
 
   useEffect(() => {
@@ -18,16 +20,21 @@ export default function ExperienceManager() {
   }, []);
 
   const loadExperiences = async () => {
+    setLoading(true);
     try {
       const response = await experienceApi.getAll();
       setExperiences(response.data);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error loading experiences:', error);
+      toast.error('Failed to load experiences');
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const expData = {
         ...currentExperience,
@@ -37,24 +44,35 @@ export default function ExperienceManager() {
 
       if (currentExperience.id) {
         await experienceApi.update(currentExperience.id, expData);
+        toast.success('Experience updated successfully!');
       } else {
         await experienceApi.create(expData);
+        toast.success('Experience created successfully!');
       }
       loadExperiences();
       setIsEditing(false);
       setCurrentExperience({ current: false });
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error saving experience:', error);
+      const errorMessage = error.response?.data?.error || 'Failed to save experience';
+      toast.error(errorMessage);
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleDelete = async (id: number) => {
     if (window.confirm('Are you sure?')) {
+      setLoading(true);
       try {
         await experienceApi.delete(id);
+        toast.success('Experience deleted successfully!');
         loadExperiences();
-      } catch (error) {
+      } catch (error: any) {
         console.error('Error deleting experience:', error);
+        toast.error('Failed to delete experience');
+      } finally {
+        setLoading(false);
       }
     }
   };

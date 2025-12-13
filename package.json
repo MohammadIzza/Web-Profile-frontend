@@ -10,11 +10,16 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@radix-ui/react-avatar": "^1.1.11",
     "@radix-ui/react-dialog": "^1.1.15",
+    "@radix-ui/react-dropdown-menu": "^2.1.16",
     "@radix-ui/react-label": "^2.1.8",
     "@radix-ui/react-popover": "^1.1.15",
     "@radix-ui/react-select": "^2.2.6",
+    "@radix-ui/react-separator": "^1.1.8",
     "@radix-ui/react-slot": "^1.2.4",
+    "@radix-ui/react-toast": "^1.2.15",
+    "@radix-ui/react-tooltip": "^1.2.8",
     "@tiptap/extension-character-count": "^3.13.0",
     "@tiptap/extension-code-block-lowlight": "^3.13.0",
     "@tiptap/extension-color": "^3.13.0",
@@ -51,6 +56,7 @@
     "emoji-picker-react": "^4.16.1",
     "lowlight": "^3.3.0",
     "lucide-react": "^0.561.0",
+    "next-themes": "^0.4.6",
     "prosemirror-commands": "^1.7.1",
     "prosemirror-state": "^1.4.4",
     "prosemirror-tables": "^1.8.3",
@@ -58,6 +64,7 @@
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-router-dom": "^7.10.1",
+    "sonner": "^2.0.7",
     "tailwind-merge": "^3.4.0",
     "tailwindcss-animate": "^1.0.7"
   },

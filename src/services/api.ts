@@ -1,12 +1,5 @@
-import axios from 'axios';
-import { API_BASE_URL, API_ENDPOINTS } from '../constants';
-
-const api = axios.create({
-  baseURL: API_BASE_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
+import { api } from '../utils/api';
+import { API_ENDPOINTS } from '../constants';
 
 // Profile API
 export const profileApi = {

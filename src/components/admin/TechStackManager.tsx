@@ -6,11 +6,13 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Plus, Edit, Trash } from 'lucide-react';
+import { Plus, Edit, Trash, Loader2 } from 'lucide-react';
+import { toast } from 'sonner';
 
 export default function TechStackManager() {
   const [techStacks, setTechStacks] = useState<TechStack[]>([]);
   const [isEditing, setIsEditing] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [currentTechStack, setCurrentTechStack] = useState<Partial<TechStack>>({ level: 'intermediate' });
 
   useEffect(() => {
@@ -18,37 +20,53 @@ export default function TechStackManager() {
   }, []);
 
   const loadTechStacks = async () => {
+    setLoading(true);
     try {
       const response = await techStackApi.getAll();
       setTechStacks(response.data);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error loading tech stacks:', error);
+      toast.error('Failed to load tech stacks');
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
     try {
       if (currentTechStack.id) {
         await techStackApi.update(currentTechStack.id, currentTechStack);
+        toast.success('Tech stack updated successfully!');
       } else {
         await techStackApi.create(currentTechStack);
+        toast.success('Tech stack created successfully!');
       }
       loadTechStacks();
       setIsEditing(false);
       setCurrentTechStack({ level: 'intermediate' });
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error saving tech stack:', error);
+      const errorMessage = error.response?.data?.error || 'Failed to save tech stack';
+      toast.error(errorMessage);
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleDelete = async (id: number) => {
     if (window.confirm('Are you sure?')) {
+      setLoading(true);
       try {
         await techStackApi.delete(id);
+        toast.success('Tech stack deleted successfully!');
         loadTechStacks();
-      } catch (error) {
+      } catch (error: any) {
         console.error('Error deleting tech stack:', error);
+        toast.error('Failed to delete tech stack');
+      } finally {
+        setLoading(false);
       }
     }
   };
