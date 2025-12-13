@@ -111,11 +111,21 @@ export default function Admin() {
 
   return (
     <div className="flex h-screen bg-white">
+      {/* Mobile Backdrop */}
+      {sidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-black/50 z-30 md:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
       {/* Sidebar */}
       <aside
         className={`${
           sidebarOpen ? 'w-56' : 'w-16'
-        } bg-white border-r border-gray-200 transition-all duration-300 ease-in-out flex flex-col`}
+        } bg-white border-r border-gray-200 transition-all duration-300 ease-in-out flex flex-col ${
+          sidebarOpen ? 'fixed md:relative inset-y-0 left-0 z-40' : 'hidden md:flex'
+        }`}
       >
         {/* Header */}
         <div className="p-3 border-b border-gray-200 flex items-center justify-between">
@@ -150,7 +160,13 @@ export default function Admin() {
             return (
               <button
                 key={item.id}
-                onClick={() => setActiveTab(item.id)}
+                onClick={() => {
+                  setActiveTab(item.id);
+                  // Close sidebar on mobile after selecting
+                  if (window.innerWidth < 768) {
+                    setSidebarOpen(false);
+                  }
+                }}
                 className={`w-full flex items-center gap-2 px-3 py-2 rounded-md transition-colors text-sm ${
                   activeTab === item.id
                     ? 'bg-black text-white'
@@ -168,15 +184,26 @@ export default function Admin() {
       {/* Main Content */}
       <main className="flex-1 overflow-auto bg-gray-50">
         {/* Top Bar */}
-        <header className="bg-white border-b border-gray-200 px-6 py-3">
+        <header className="bg-white border-b border-gray-200 px-4 sm:px-6 py-3">
           <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-lg font-semibold text-black">
-                {menuItems.find((item) => item.id === activeTab)?.label || 'Dashboard'}
-              </h1>
-              <p className="text-xs text-gray-600 mt-0.5">
-                Manage your {activeTab === 'dashboard' ? 'content' : activeTab}
-              </p>
+            <div className="flex items-center gap-3">
+              {/* Mobile menu button */}
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setSidebarOpen(true)}
+                className="md:hidden h-8 w-8 p-0"
+              >
+                <Menu className="h-4 w-4" />
+              </Button>
+              <div>
+                <h1 className="text-base sm:text-lg font-semibold text-black">
+                  {menuItems.find((item) => item.id === activeTab)?.label || 'Dashboard'}
+                </h1>
+                <p className="text-xs text-gray-600 mt-0.5 hidden sm:block">
+                  Manage your {activeTab === 'dashboard' ? 'content' : activeTab}
+                </p>
+              </div>
             </div>
             <div className="flex items-center gap-2">
               <DropdownMenu>
@@ -223,7 +250,7 @@ export default function Admin() {
         </header>
 
         {/* Content Area */}
-        <div className="p-6">{renderContent()}</div>
+        <div className="p-4 sm:p-6">{renderContent()}</div>
       </main>
 
       {/* Change Password Dialog */}

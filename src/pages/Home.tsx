@@ -9,7 +9,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { Github, Linkedin, Twitter, Mail, MapPin, ExternalLink, Calendar, Briefcase, Code2, Star } from 'lucide-react';
+import { Github, Linkedin, Twitter, Mail, MapPin, ExternalLink, Calendar, Briefcase, Code2, Star, Menu, X, ChevronDown, FileText } from 'lucide-react';
 import EmptyState from '../components/EmptyState';
 import SEO from '../components/SEO';
 
@@ -20,6 +20,20 @@ export default function Home() {
   const [experiences, setExperiences] = useState<Experience[]>([]);
   const [techStacks, setTechStacks] = useState<TechStack[]>([]);
   const [loading, setLoading] = useState(true);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({
+    projects: false,
+    experience: false,
+    techstack: false,
+    blog: false,
+  });
+
+  const toggleSection = (section: string) => {
+    setExpandedSections(prev => ({
+      ...prev,
+      [section]: !prev[section]
+    }));
+  };
 
   useEffect(() => {
     loadData();
@@ -60,26 +74,90 @@ export default function Home() {
       <TooltipProvider>
         <div className="min-h-screen bg-white">
         {/* Header/Navigation */}
-        <header className="border-b border-gray-200 sticky top-0 bg-white z-10 backdrop-blur-sm bg-white/90">
-          <div className="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
-            <div className="flex items-center gap-3">
-              <img src="/logo.svg" alt="Logo" className="h-8 w-8" />
-              <h1 className="text-lg font-semibold text-black">
+        <header className="border-b border-gray-200 sticky top-0 bg-white z-20 backdrop-blur-sm bg-white/90">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex justify-between items-center">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <img src="/logo.svg" alt="Logo" className="h-6 w-6 sm:h-8 sm:w-8" />
+              <h1 className="text-base sm:text-lg font-semibold text-black">
                 {loading ? <Skeleton className="h-5 w-24" /> : profile?.name || 'Portfolio'}
               </h1>
             </div>
-            <nav className="flex gap-6 text-sm">
+            
+            {/* Desktop Navigation */}
+            <nav className="hidden md:flex gap-4 lg:gap-6 text-sm">
               <a href="#projects" className="text-gray-700 hover:text-black transition">Projects</a>
               <a href="#experience" className="text-gray-700 hover:text-black transition">Experience</a>
               <a href="#techstack" className="text-gray-700 hover:text-black transition">Tech Stack</a>
               <a href="#blog" className="text-gray-700 hover:text-black transition">Blog</a>
               <a href="#contact" className="text-gray-700 hover:text-black transition">Contact</a>
             </nav>
+            
+            {/* Mobile Menu Button */}
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="md:hidden h-8 w-8 p-0"
+            >
+              {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </Button>
           </div>
+          
+          {/* Mobile Navigation Menu */}
+          {mobileMenuOpen && (
+            <>
+              {/* Backdrop */}
+              <div 
+                className="fixed inset-0 bg-black/20 z-30 md:hidden"
+                onClick={() => setMobileMenuOpen(false)}
+              />
+              
+              {/* Menu */}
+              <nav className="absolute top-full left-0 right-0 md:hidden border-t border-gray-200 bg-white shadow-lg z-40">
+                <div className="max-w-6xl mx-auto px-4 py-2 flex flex-col gap-1">
+                  <a 
+                    href="#projects" 
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="text-sm text-gray-700 hover:text-black hover:bg-gray-50 px-3 py-2 rounded-md transition"
+                  >
+                    Projects
+                  </a>
+                  <a 
+                    href="#experience" 
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="text-sm text-gray-700 hover:text-black hover:bg-gray-50 px-3 py-2 rounded-md transition"
+                  >
+                    Experience
+                  </a>
+                  <a 
+                    href="#techstack" 
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="text-sm text-gray-700 hover:text-black hover:bg-gray-50 px-3 py-2 rounded-md transition"
+                  >
+                    Tech Stack
+                  </a>
+                  <a 
+                    href="#blog" 
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="text-sm text-gray-700 hover:text-black hover:bg-gray-50 px-3 py-2 rounded-md transition"
+                  >
+                    Blog
+                  </a>
+                  <a 
+                    href="#contact" 
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="text-sm text-gray-700 hover:text-black hover:bg-gray-50 px-3 py-2 rounded-md transition"
+                  >
+                    Contact
+                  </a>
+                </div>
+              </nav>
+            </>
+          )}
         </header>
 
         {/* Hero Section */}
-        <section className="border-b py-16 px-4">
+        <section className="border-b py-8 sm:py-12 md:py-16 px-4 sm:px-6">
           <div className="max-w-4xl mx-auto">
             {loading ? (
               <div className="text-center space-y-4">
@@ -184,14 +262,31 @@ export default function Home() {
         </section>
 
         {/* Portfolio Section */}
-        <section id="projects" className="py-16 px-4 bg-gray-50">
-          <div className="max-w-6xl mx-auto">
-            <div className="mb-8">
-              <h3 className="text-2xl font-semibold text-black mb-2">Featured Projects</h3>
-              <p className="text-sm text-gray-600">Check out some of my recent work</p>
+        <section id="projects" className="bg-gray-50 border-b border-gray-300">
+          <button
+            onClick={() => toggleSection('projects')}
+            className="w-full py-4 hover:bg-gray-100 transition-colors group"
+          >
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <Briefcase className="w-5 h-5 text-black" />
+                <div className="text-left">
+                  <h3 className="text-lg font-semibold text-black">Featured Projects</h3>
+                  <p className="text-xs text-gray-600">Check out some of my recent work</p>
+                </div>
+              </div>
+              <ChevronDown 
+                className={`w-5 h-5 text-gray-500 transition-transform ${
+                  expandedSections.projects ? 'rotate-180' : ''
+                }`}
+              />
             </div>
+          </button>
+
+          {expandedSections.projects && (
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 pb-4">
             {loading ? (
-              <div className="grid md:grid-cols-3 gap-6">
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                 {[1, 2, 3].map((i) => (
                   <Card key={i} className="bg-white">
                     <CardHeader>
@@ -215,11 +310,11 @@ export default function Home() {
             ) : portfolios.length === 0 ? (
               <EmptyState type="portfolio" />
             ) : (
-              <div className="grid md:grid-cols-3 gap-6">
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                 {portfolios.map((portfolio) => (
                   <Card key={portfolio.id} className="bg-white border-gray-200 hover:shadow-lg transition-shadow duration-300 group">
                     {portfolio.image && (
-                      <div className="h-48 overflow-hidden rounded-t-lg">
+                      <div className="h-40 sm:h-48 overflow-hidden rounded-t-lg">
                         <img 
                           src={portfolio.image} 
                           alt={portfolio.title}
@@ -282,18 +377,33 @@ export default function Home() {
               </div>
             )}
           </div>
+          )}
         </section>
 
         {/* Experience Section */}
-        <section id="experience" className="py-16 px-4">
-          <div className="max-w-6xl mx-auto">
-            <div className="mb-8">
-              <div className="flex items-center gap-3 mb-2">
-                <Briefcase className="w-6 h-6 text-black" />
-                <h3 className="text-2xl font-semibold text-black">Work Experience</h3>
+        <section id="experience" className="border-b border-gray-300">
+          <button
+            onClick={() => toggleSection('experience')}
+            className="w-full py-4 hover:bg-gray-100 transition-colors group"
+          >
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <Briefcase className="w-5 h-5 text-black" />
+                <div className="text-left">
+                  <h3 className="text-lg font-semibold text-black">Work Experience</h3>
+                  <p className="text-xs text-gray-600">My professional journey</p>
+                </div>
               </div>
-              <p className="text-sm text-gray-600">My professional journey</p>
+              <ChevronDown 
+                className={`w-5 h-5 text-gray-500 transition-transform ${
+                  expandedSections.experience ? 'rotate-180' : ''
+                }`}
+              />
             </div>
+          </button>
+
+          {expandedSections.experience && (
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 pb-4">
             {loading ? (
               <div className="space-y-6">
                 {[1, 2].map((i) => (
@@ -355,20 +465,35 @@ export default function Home() {
               </div>
             )}
           </div>
+          )}
         </section>
 
         {/* Tech Stack Section */}
-        <section id="techstack" className="py-16 px-4 bg-gray-50">
-          <div className="max-w-6xl mx-auto">
-            <div className="mb-8">
-              <div className="flex items-center gap-3 mb-2">
-                <Code2 className="w-6 h-6 text-black" />
-                <h3 className="text-2xl font-semibold text-black">Tech Stack</h3>
+        <section id="techstack" className="bg-gray-50 border-b border-gray-300">
+          <button
+            onClick={() => toggleSection('techstack')}
+            className="w-full py-4 hover:bg-gray-100 transition-colors group"
+          >
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <Code2 className="w-5 h-5 text-black" />
+                <div className="text-left">
+                  <h3 className="text-lg font-semibold text-black">Tech Stack</h3>
+                  <p className="text-xs text-gray-600">Technologies I work with</p>
+                </div>
               </div>
-              <p className="text-sm text-gray-600">Technologies I work with</p>
+              <ChevronDown 
+                className={`w-5 h-5 text-gray-500 transition-transform ${
+                  expandedSections.techstack ? 'rotate-180' : ''
+                }`}
+              />
             </div>
+          </button>
+
+          {expandedSections.techstack && (
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 pb-4">
             {loading ? (
-              <div className="grid md:grid-cols-3 gap-6">
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                 {[1, 2, 3].map((i) => (
                   <Card key={i} className="bg-white">
                     <CardHeader>
@@ -385,7 +510,7 @@ export default function Home() {
             ) : techStacks.length === 0 ? (
               <EmptyState type="general" message="No tech stack added yet." />
             ) : (
-              <div className="grid md:grid-cols-3 gap-6">
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                 {['frontend', 'backend', 'tools', 'database', 'devops', 'other'].map((category) => {
                   const categoryTechs = techStacks.filter(
                     (tech) => tech.category.toLowerCase() === category
@@ -433,17 +558,35 @@ export default function Home() {
               </div>
             )}
           </div>
+          )}
         </section>
 
         {/* Blog Section */}
-        <section id="blog" className="py-16 px-4">
-          <div className="max-w-6xl mx-auto">
-            <div className="mb-8">
-              <h3 className="text-2xl font-semibold text-black mb-2">Latest Blog Posts</h3>
-              <p className="text-sm text-gray-600">Thoughts, tutorials, and insights</p>
+        <section id="blog" className="border-b border-gray-300">
+          <button
+            onClick={() => toggleSection('blog')}
+            className="w-full py-4 hover:bg-gray-100 transition-colors group"
+          >
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <FileText className="w-5 h-5 text-black" />
+                <div className="text-left">
+                  <h3 className="text-lg font-semibold text-black">Latest Blog Posts</h3>
+                  <p className="text-xs text-gray-600">Thoughts, tutorials, and insights</p>
+                </div>
+              </div>
+              <ChevronDown 
+                className={`w-5 h-5 text-gray-500 transition-transform ${
+                  expandedSections.blog ? 'rotate-180' : ''
+                }`}
+              />
             </div>
+          </button>
+
+          {expandedSections.blog && (
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 pb-4">
             {loading ? (
-              <div className="grid md:grid-cols-3 gap-6">
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                 {[1, 2, 3].map((i) => (
                   <Card key={i} className="bg-white">
                     <CardHeader>
@@ -464,7 +607,7 @@ export default function Home() {
             ) : blogs.length === 0 ? (
               <EmptyState type="blog" />
             ) : (
-              <div className="grid md:grid-cols-3 gap-6">
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                 {blogs.map((blog) => (
                   <Card key={blog.id} className="bg-white border-gray-200 hover:shadow-lg transition-shadow duration-300 group">
                     {blog.image && (
@@ -515,10 +658,11 @@ export default function Home() {
               </div>
             )}
           </div>
+          )}
         </section>
 
         {/* Footer */}
-        <footer id="contact" className="border-t border-gray-200 py-12 px-4 bg-gray-50">
+        <footer id="contact" className="border-t border-gray-200 py-8 sm:py-10 md:py-12 px-4 sm:px-6 bg-gray-50">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-8">
               <h3 className="text-2xl font-semibold text-black mb-2">Get In Touch</h3>
