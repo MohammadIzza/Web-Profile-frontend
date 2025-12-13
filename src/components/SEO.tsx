@@ -1,4 +1,4 @@
-import { Helmet } from 'react-helmet-async';
+import { useEffect } from 'react';
 
 interface SEOProps {
   title?: string;
@@ -21,35 +21,46 @@ export default function SEO({
 }: SEOProps) {
   const fullTitle = title === 'Portfolio Website' ? title : `${title} | Portfolio`;
 
-  return (
-    <Helmet>
-      {/* Basic Meta Tags */}
-      <title>{fullTitle}</title>
-      <meta name="description" content={description} />
-      
-      {/* Open Graph */}
-      <meta property="og:type" content={type} />
-      <meta property="og:title" content={fullTitle} />
-      <meta property="og:description" content={description} />
-      <meta property="og:image" content={image} />
-      <meta property="og:url" content={url} />
-      
-      {/* Twitter Card */}
-      <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:title" content={fullTitle} />
-      <meta name="twitter:description" content={description} />
-      <meta name="twitter:image" content={image} />
-      
-      {/* Article specific */}
-      {type === 'article' && publishedTime && (
-        <meta property="article:published_time" content={publishedTime} />
-      )}
-      {type === 'article' && tags.map((tag, i) => (
-        <meta key={i} property="article:tag" content={tag} />
-      ))}
-      
-      {/* Canonical URL */}
-      <link rel="canonical" href={url} />
-    </Helmet>
-  );
+  useEffect(() => {
+    // Update document title
+    document.title = fullTitle;
+
+    // Update meta tags
+    const setMetaTag = (name: string, content: string, property = false) => {
+      const attr = property ? 'property' : 'name';
+      let meta = document.querySelector(`meta[${attr}="${name}"]`);
+      if (!meta) {
+        meta = document.createElement('meta');
+        meta.setAttribute(attr, name);
+        document.head.appendChild(meta);
+      }
+      meta.setAttribute('content', content);
+    };
+
+    setMetaTag('description', description);
+    setMetaTag('og:type', type, true);
+    setMetaTag('og:title', fullTitle, true);
+    setMetaTag('og:description', description, true);
+    setMetaTag('og:image', image, true);
+    setMetaTag('og:url', url, true);
+    setMetaTag('twitter:card', 'summary_large_image');
+    setMetaTag('twitter:title', fullTitle);
+    setMetaTag('twitter:description', description);
+    setMetaTag('twitter:image', image);
+
+    if (type === 'article' && publishedTime) {
+      setMetaTag('article:published_time', publishedTime, true);
+    }
+
+    // Update canonical URL
+    let canonical = document.querySelector('link[rel="canonical"]');
+    if (!canonical) {
+      canonical = document.createElement('link');
+      canonical.setAttribute('rel', 'canonical');
+      document.head.appendChild(canonical);
+    }
+    canonical.setAttribute('href', url);
+  }, [fullTitle, description, image, url, type, publishedTime, tags]);
+
+  return null;
 }

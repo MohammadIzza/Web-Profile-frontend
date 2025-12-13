@@ -1,5 +1,4 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { HelmetProvider } from 'react-helmet-async';
 import Home from './pages/Home';
 import Admin from './pages/Admin';
 import Login from './pages/Login';
@@ -13,10 +12,9 @@ import { Toaster as Sonner } from '@/components/ui/sonner';
 
 function App() {
   return (
-    <HelmetProvider>
-      <ErrorBoundary>
-        <AuthProvider>
-          <BrowserRouter>
+    <ErrorBoundary>
+      <AuthProvider>
+        <BrowserRouter>
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />
@@ -36,7 +34,6 @@ function App() {
           <Sonner />
         </AuthProvider>
       </ErrorBoundary>
-    </HelmetProvider>
   );
 }
 
