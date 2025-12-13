@@ -63,14 +63,7 @@ export default function Home() {
         <header className="border-b border-gray-200 sticky top-0 bg-white z-10 backdrop-blur-sm bg-white/90">
           <div className="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
             <div className="flex items-center gap-3">
-              {loading ? (
-                <Skeleton className="h-8 w-8 rounded-full" />
-              ) : profile?.avatar ? (
-                <Avatar className="h-8 w-8">
-                  <AvatarImage src={profile.avatar} alt={profile.name} />
-                  <AvatarFallback>{profile.name?.charAt(0) || 'P'}</AvatarFallback>
-                </Avatar>
-              ) : null}
+              <img src="/logo.svg" alt="Logo" className="h-8 w-8" />
               <h1 className="text-lg font-semibold text-black">
                 {loading ? <Skeleton className="h-5 w-24" /> : profile?.name || 'Portfolio'}
               </h1>
