@@ -592,9 +592,6 @@ export default function Home() {
               <p className="text-xs text-gray-600">
                 © {new Date().getFullYear()} {profile?.name || 'Portfolio'}. All rights reserved.
               </p>
-              <p className="text-xs text-gray-500 mt-1">
-                Built with React, TypeScript, and Tailwind CSS
-              </p>
             </div>
           </div>
         </footer>
