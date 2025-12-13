@@ -1,9 +1,12 @@
 import axios from 'axios';
 import { API_BASE_URL } from '../constants';
 
+// Remove trailing slash from base URL to prevent double slashes
+const baseURL = API_BASE_URL.endsWith('/') ? API_BASE_URL.slice(0, -1) : API_BASE_URL;
+
 // Create axios instance with default config
 export const api = axios.create({
-  baseURL: API_BASE_URL,
+  baseURL,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -36,7 +39,7 @@ api.interceptors.response.use(
       try {
         const refreshToken = localStorage.getItem('refresh_token');
         if (refreshToken) {
-          const response = await axios.post(`${API_BASE_URL}/api/auth/refresh`, {
+          const response = await axios.post(`${baseURL}/api/auth/refresh`, {
             refreshToken,
           });
 
