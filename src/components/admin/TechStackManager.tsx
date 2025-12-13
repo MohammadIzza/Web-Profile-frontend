@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Plus, Edit, Trash, Loader2 } from 'lucide-react';
+import { Plus, Edit, Trash } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function TechStackManager() {
@@ -138,8 +138,10 @@ export default function TechStackManager() {
               </Select>
 
               <div className="flex gap-2">
-                <Button type="submit" size="sm">Save</Button>
-                <Button type="button" size="sm" variant="outline" onClick={() => { setIsEditing(false); setCurrentTechStack({ level: 'intermediate' }); }}>
+                <Button type="submit" size="sm" disabled={loading}>
+                  {loading ? 'Saving...' : 'Save'}
+                </Button>
+                <Button type="button" size="sm" variant="outline" onClick={() => { setIsEditing(false); setCurrentTechStack({ level: 'intermediate' }); }} disabled={loading}>
                   Cancel
                 </Button>
               </div>

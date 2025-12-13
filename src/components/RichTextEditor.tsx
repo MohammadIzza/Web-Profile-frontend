@@ -55,28 +55,18 @@ import {
   Image as ImageIcon,
   Link as LinkIcon,
   Code,
-  Code2,
   Table as TableIcon,
   Quote,
   Minus,
   Youtube as YoutubeIcon,
   Palette,
   Highlighter,
-  Type,
-  Heading1,
-  Heading2,
-  Heading3,
-  Heading4,
-  Heading5,
-  Heading6,
   Pilcrow,
   Smile,
   Undo,
   Redo,
   Save,
   Download,
-  Upload,
-  Eye,
   Maximize2,
   Minimize2,
 } from 'lucide-react';
@@ -181,7 +171,7 @@ export default function RichTextEditor({ content, onChange }: RichTextEditorProp
       onChange(editor.getHTML());
     },
     editorProps: {
-      handleDrop: (view, event, _slice, moved) => {
+      handleDrop: (_view, event, _slice, moved) => {
         if (!moved && event.dataTransfer && event.dataTransfer.files && event.dataTransfer.files[0]) {
           const file = event.dataTransfer.files[0];
           if (file.type.startsWith('image/')) {
@@ -192,7 +182,7 @@ export default function RichTextEditor({ content, onChange }: RichTextEditorProp
         }
         return false;
       },
-      handlePaste: (view, event) => {
+      handlePaste: (_view, event) => {
         const items = event.clipboardData?.items;
         if (items) {
           for (let i = 0; i < items.length; i++) {
@@ -208,7 +198,7 @@ export default function RichTextEditor({ content, onChange }: RichTextEditorProp
         }
         return false;
       },
-      handleClickOn: (view, pos, node, nodePos, event) => {
+      handleClickOn: (_view, _pos, node) => {
         if (node.type.name === 'image') {
           const attrs = node.attrs;
           setCurrentImageAttrs({
@@ -252,7 +242,6 @@ export default function RichTextEditor({ content, onChange }: RichTextEditorProp
         editor?.chain().focus().setImage({ 
           src: fullUrl,
           alt: '',
-          align: 'center',
         }).run();
       }
     } catch (error) {
@@ -321,8 +310,6 @@ export default function RichTextEditor({ content, onChange }: RichTextEditorProp
   const [highlightColor, setHighlightColor] = useState('#ffff00');
   const [imageUrl, setImageUrl] = useState('');
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const [showPreview, setShowPreview] = useState(false);
-  const [fontSize, setFontSize] = useState('16');
 
   const insertTable = () => {
     editor?.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run();

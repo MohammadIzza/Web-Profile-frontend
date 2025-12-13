@@ -9,7 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Separator } from '@/components/ui/separator';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { Plus, Edit, Trash, ExternalLink, Github, Calendar, Tag, Loader2 } from 'lucide-react';
+import { Plus, Edit, Trash, ExternalLink, Github } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function PortfolioManager() {
@@ -182,8 +182,10 @@ export default function PortfolioManager() {
               </div>
 
               <div className="flex gap-2">
-                <Button type="submit" size="sm">Save</Button>
-                <Button type="button" size="sm" variant="outline" onClick={() => { setIsEditing(false); setCurrentPortfolio({ tags: [] }); }}>
+                <Button type="submit" size="sm" disabled={loading}>
+                  {loading ? 'Saving...' : 'Save'}
+                </Button>
+                <Button type="button" size="sm" variant="outline" onClick={() => { setIsEditing(false); setCurrentPortfolio({ tags: [] }); }} disabled={loading}>
                   Cancel
                 </Button>
               </div>

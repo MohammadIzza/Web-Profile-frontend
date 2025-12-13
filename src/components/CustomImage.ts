@@ -1,9 +1,5 @@
 import Image from '@tiptap/extension-image';
-import { mergeAttributes, Node } from '@tiptap/core';
-import { Plugin, PluginKey } from 'prosemirror-state';
-import { Decoration, DecorationSet } from 'prosemirror-view';
-
-const imageResizePluginKey = new PluginKey('imageResize');
+import { mergeAttributes } from '@tiptap/core';
 
 export const CustomImage = Image.extend({
   addAttributes() {
@@ -47,14 +43,14 @@ export const CustomImage = Image.extend({
       align: {
         default: 'center',
         parseHTML: (element) => element.parentElement?.getAttribute('data-align') || 'center',
-        renderHTML: (attributes) => {
+        renderHTML: () => {
           return {};
         },
       },
       caption: {
         default: null,
         parseHTML: (element) => element.parentElement?.querySelector('.image-caption')?.textContent,
-        renderHTML: (attributes) => {
+        renderHTML: () => {
           return {};
         },
       },
@@ -205,7 +201,6 @@ export const CustomImage = Image.extend({
 
       const handleMouseUp = () => {
         if (isResizing && typeof getPos === 'function') {
-          const pos = getPos();
           editor.commands.updateAttributes('image', {
             width: `${img.offsetWidth}px`,
             height: `${img.offsetHeight}px`,
@@ -221,7 +216,6 @@ export const CustomImage = Image.extend({
       // Caption update
       caption.addEventListener('blur', () => {
         if (typeof getPos === 'function') {
-          const pos = getPos();
           editor.commands.updateAttributes('image', {
             caption: caption.textContent || '',
           });

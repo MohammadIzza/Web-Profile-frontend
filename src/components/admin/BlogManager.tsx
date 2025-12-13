@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { blogApi } from '../../services/api';
 import type { Blog } from '../../types';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -9,7 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Separator } from '@/components/ui/separator';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { Plus, Edit, Trash, Eye, Calendar, Tag, Loader2 } from 'lucide-react';
+import { Plus, Edit, Trash, Calendar, Tag } from 'lucide-react';
 import RichTextEditor from '../RichTextEditor';
 import { toast } from 'sonner';
 
@@ -225,8 +225,10 @@ export default function BlogManager() {
               </div>
 
               <div className="flex gap-2">
-                <Button type="submit" size="sm">Save</Button>
-                <Button type="button" size="sm" variant="outline" onClick={() => { setIsEditing(false); setCurrentBlog({ tags: [], published: false, content: '' }); }}>
+                <Button type="submit" size="sm" disabled={loading}>
+                  {loading ? 'Saving...' : 'Save'}
+                </Button>
+                <Button type="button" size="sm" variant="outline" onClick={() => { setIsEditing(false); setCurrentBlog({ tags: [], published: false, content: '' }); }} disabled={loading}>
                   Cancel
                 </Button>
               </div>

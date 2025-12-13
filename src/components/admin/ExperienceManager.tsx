@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
-import { Plus, Edit, Trash, Loader2 } from 'lucide-react';
+import { Plus, Edit, Trash } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function ExperienceManager() {
@@ -164,8 +164,10 @@ export default function ExperienceManager() {
               )}
 
               <div className="flex gap-2">
-                <Button type="submit">Save</Button>
-                <Button type="button" variant="outline" onClick={() => { setIsEditing(false); setCurrentExperience({ current: false }); }}>
+                <Button type="submit" disabled={loading}>
+                  {loading ? 'Saving...' : 'Save'}
+                </Button>
+                <Button type="button" variant="outline" onClick={() => { setIsEditing(false); setCurrentExperience({ current: false }); }} disabled={loading}>
                   Cancel
                 </Button>
               </div>
