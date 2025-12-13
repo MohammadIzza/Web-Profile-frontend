@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { profileApi, portfolioApi, blogApi } from '../services/api';
 import type { Profile, Portfolio, Blog } from '../types';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -9,6 +10,8 @@ import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Github, Linkedin, Twitter, Mail, MapPin, ExternalLink, Calendar } from 'lucide-react';
+import EmptyState from '../components/EmptyState';
+import SEO from '../components/SEO';
 
 export default function Home() {
   const [profile, setProfile] = useState<Profile | null>(null);
@@ -42,8 +45,14 @@ export default function Home() {
   };
 
   return (
-    <TooltipProvider>
-      <div className="min-h-screen bg-white">
+    <>
+      <SEO
+        title={profile?.name || 'Portfolio Website'}
+        description={profile?.bio || 'Welcome to my portfolio website'}
+        image={profile?.avatar}
+      />
+      <TooltipProvider>
+        <div className="min-h-screen bg-white">
         {/* Header/Navigation */}
         <header className="border-b border-gray-200 sticky top-0 bg-white z-10 backdrop-blur-sm bg-white/90">
           <div className="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
@@ -202,6 +211,8 @@ export default function Home() {
                   </Card>
                 ))}
               </div>
+            ) : portfolios.length === 0 ? (
+              <EmptyState type="portfolio" />
             ) : (
               <div className="grid md:grid-cols-3 gap-6">
                 {portfolios.map((portfolio) => (
@@ -298,14 +309,16 @@ export default function Home() {
                   </Card>
                 ))}
               </div>
+            ) : blogs.length === 0 ? (
+              <EmptyState type="blog" />
             ) : (
               <div className="grid md:grid-cols-3 gap-6">
                 {blogs.map((blog) => (
                   <Card key={blog.id} className="bg-white border-gray-200 hover:shadow-lg transition-shadow duration-300 group">
-                    {blog.coverImage && (
+                    {blog.image && (
                       <div className="h-40 overflow-hidden rounded-t-lg">
                         <img 
-                          src={blog.coverImage} 
+                          src={blog.image} 
                           alt={blog.title}
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                         />
@@ -338,8 +351,11 @@ export default function Home() {
                         variant="ghost" 
                         size="sm" 
                         className="h-8 text-xs w-full group-hover:bg-gray-100"
+                        asChild
                       >
-                        Read More →
+                        <Link to={`/blog/${blog.slug}`}>
+                          Read More →
+                        </Link>
                       </Button>
                     </CardContent>
                   </Card>
@@ -432,5 +448,6 @@ export default function Home() {
         </footer>
       </div>
     </TooltipProvider>
+    </>
   );
 }
