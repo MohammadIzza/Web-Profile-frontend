@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { profileApi, portfolioApi, blogApi } from '../services/api';
-import type { Profile, Portfolio, Blog } from '../types';
+import { profileApi, portfolioApi, blogApi, experienceApi, techStackApi } from '../services/api';
+import type { Profile, Portfolio, Blog, Experience, TechStack } from '../types';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -9,7 +9,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { Github, Linkedin, Twitter, Mail, MapPin, ExternalLink, Calendar } from 'lucide-react';
+import { Github, Linkedin, Twitter, Mail, MapPin, ExternalLink, Calendar, Briefcase, Code2, Star } from 'lucide-react';
 import EmptyState from '../components/EmptyState';
 import SEO from '../components/SEO';
 
@@ -17,6 +17,8 @@ export default function Home() {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [portfolios, setPortfolios] = useState<Portfolio[]>([]);
   const [blogs, setBlogs] = useState<Blog[]>([]);
+  const [experiences, setExperiences] = useState<Experience[]>([]);
+  const [techStacks, setTechStacks] = useState<TechStack[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -26,10 +28,12 @@ export default function Home() {
   const loadData = async () => {
     try {
       setLoading(true);
-      const [profileRes, portfolioRes, blogRes] = await Promise.all([
+      const [profileRes, portfolioRes, blogRes, experienceRes, techStackRes] = await Promise.all([
         profileApi.getAll(),
         portfolioApi.getAll(),
         blogApi.getAll(),
+        experienceApi.getAll(),
+        techStackApi.getAll(),
       ]);
       
       if (profileRes.data.length > 0) {
@@ -37,6 +41,8 @@ export default function Home() {
       }
       setPortfolios(portfolioRes.data.slice(0, 3));
       setBlogs(blogRes.data.filter((b: Blog) => b.published).slice(0, 3));
+      setExperiences(experienceRes.data.slice(0, 4));
+      setTechStacks(techStackRes.data);
     } catch (error) {
       console.error('Error loading data:', error);
     } finally {
@@ -71,6 +77,8 @@ export default function Home() {
             </div>
             <nav className="flex gap-6 text-sm">
               <a href="#projects" className="text-gray-700 hover:text-black transition">Projects</a>
+              <a href="#experience" className="text-gray-700 hover:text-black transition">Experience</a>
+              <a href="#techstack" className="text-gray-700 hover:text-black transition">Tech Stack</a>
               <a href="#blog" className="text-gray-700 hover:text-black transition">Blog</a>
               <a href="#contact" className="text-gray-700 hover:text-black transition">Contact</a>
             </nav>
@@ -278,6 +286,157 @@ export default function Home() {
                     </CardContent>
                   </Card>
                 ))}
+              </div>
+            )}
+          </div>
+        </section>
+
+        {/* Experience Section */}
+        <section id="experience" className="py-16 px-4">
+          <div className="max-w-6xl mx-auto">
+            <div className="mb-8">
+              <div className="flex items-center gap-3 mb-2">
+                <Briefcase className="w-6 h-6 text-black" />
+                <h3 className="text-2xl font-semibold text-black">Work Experience</h3>
+              </div>
+              <p className="text-sm text-gray-600">My professional journey</p>
+            </div>
+            {loading ? (
+              <div className="space-y-6">
+                {[1, 2].map((i) => (
+                  <Card key={i} className="bg-white">
+                    <CardContent className="pt-6">
+                      <Skeleton className="h-6 w-48 mb-2" />
+                      <Skeleton className="h-5 w-64 mb-4" />
+                      <Skeleton className="h-4 w-full mb-2" />
+                      <Skeleton className="h-4 w-3/4" />
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            ) : experiences.length === 0 ? (
+              <EmptyState type="general" message="No work experience added yet." />
+            ) : (
+              <div className="space-y-6">
+                {experiences.map((exp, index) => (
+                  <Card key={exp.id} className="bg-white border-gray-200 hover:shadow-lg transition-shadow duration-300">
+                    <CardContent className="pt-6">
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-3 mb-2">
+                            <div className="w-2 h-2 rounded-full bg-black"></div>
+                            <h4 className="text-lg font-semibold text-black">{exp.position}</h4>
+                            {exp.current && (
+                              <Badge variant="default" className="text-xs">Current</Badge>
+                            )}
+                          </div>
+                          <div className="ml-5">
+                            <p className="text-sm font-medium text-gray-700 mb-1">
+                              {exp.company}
+                              {exp.location && (
+                                <span className="text-gray-500"> • {exp.location}</span>
+                              )}
+                            </p>
+                            <div className="flex items-center gap-2 text-xs text-gray-500 mb-3">
+                              <Calendar className="w-3.5 h-3.5" />
+                              <span>
+                                {new Date(exp.startDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
+                                {' - '}
+                                {exp.current ? 'Present' : new Date(exp.endDate!).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
+                              </span>
+                            </div>
+                            <p className="text-sm text-gray-600 leading-relaxed whitespace-pre-line">
+                              {exp.description}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      {index < experiences.length - 1 && (
+                        <div className="mt-6 ml-5">
+                          <div className="w-0.5 h-6 bg-gray-200"></div>
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            )}
+          </div>
+        </section>
+
+        {/* Tech Stack Section */}
+        <section id="techstack" className="py-16 px-4 bg-gray-50">
+          <div className="max-w-6xl mx-auto">
+            <div className="mb-8">
+              <div className="flex items-center gap-3 mb-2">
+                <Code2 className="w-6 h-6 text-black" />
+                <h3 className="text-2xl font-semibold text-black">Tech Stack</h3>
+              </div>
+              <p className="text-sm text-gray-600">Technologies I work with</p>
+            </div>
+            {loading ? (
+              <div className="grid md:grid-cols-3 gap-6">
+                {[1, 2, 3].map((i) => (
+                  <Card key={i} className="bg-white">
+                    <CardHeader>
+                      <Skeleton className="h-5 w-32 mb-4" />
+                    </CardHeader>
+                    <CardContent className="space-y-2">
+                      <Skeleton className="h-4 w-full" />
+                      <Skeleton className="h-4 w-full" />
+                      <Skeleton className="h-4 w-3/4" />
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            ) : techStacks.length === 0 ? (
+              <EmptyState type="general" message="No tech stack added yet." />
+            ) : (
+              <div className="grid md:grid-cols-3 gap-6">
+                {['frontend', 'backend', 'tools', 'database', 'devops', 'other'].map((category) => {
+                  const categoryTechs = techStacks.filter(
+                    (tech) => tech.category.toLowerCase() === category
+                  );
+                  if (categoryTechs.length === 0) return null;
+                  
+                  return (
+                    <Card key={category} className="bg-white border-gray-200">
+                      <CardHeader className="pb-3">
+                        <CardTitle className="text-base font-semibold text-black capitalize">
+                          {category}
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="space-y-3">
+                          {categoryTechs.map((tech) => (
+                            <div key={tech.id} className="flex items-center justify-between">
+                              <div className="flex items-center gap-2">
+                                {tech.icon && (
+                                  <span className="text-lg">{tech.icon}</span>
+                                )}
+                                <span className="text-sm font-medium text-gray-800">
+                                  {tech.name}
+                                </span>
+                              </div>
+                              <div className="flex items-center gap-0.5">
+                                {[1, 2, 3, 4, 5].map((star) => (
+                                  <Star
+                                    key={star}
+                                    className={`w-3 h-3 ${
+                                      star <= (tech.level === 'expert' ? 5 : tech.level === 'advanced' ? 4 : tech.level === 'intermediate' ? 3 : 2)
+                                        ? 'fill-yellow-400 text-yellow-400'
+                                        : 'text-gray-300'
+                                    }`}
+                                  />
+                                ))}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  );
+                })}
               </div>
             )}
           </div>
