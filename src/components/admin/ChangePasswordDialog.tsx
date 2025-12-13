@@ -15,6 +15,9 @@ import axios from 'axios';
 import { API_BASE_URL } from '../../constants';
 import { useAuth } from '../../contexts/AuthContext';
 
+// Remove trailing slash to prevent double slashes
+const baseURL = API_BASE_URL.endsWith('/') ? API_BASE_URL.slice(0, -1) : API_BASE_URL;
+
 interface ChangePasswordDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -44,7 +47,7 @@ export default function ChangePasswordDialog({ open, onOpenChange }: ChangePassw
 
     setLoading(true);
     try {
-      const response = await axios.post(`${API_BASE_URL}/api/auth/change-password`, {
+      const response = await axios.post(`${baseURL}/api/auth/change-password`, {
         username: user?.username,
         oldPassword: formData.oldPassword,
         newPassword: formData.newPassword,

@@ -30,6 +30,9 @@ import { Youtube } from '@tiptap/extension-youtube';
 import { CodeBlockLowlight } from '@tiptap/extension-code-block-lowlight';
 import { API_BASE_URL } from '../constants';
 import { common, createLowlight } from 'lowlight';
+
+// Remove trailing slash to prevent double slashes
+const baseURL = API_BASE_URL.endsWith('/') ? API_BASE_URL.slice(0, -1) : API_BASE_URL;
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -230,7 +233,7 @@ export default function RichTextEditor({ content, onChange }: RichTextEditorProp
         headers['Authorization'] = `Bearer ${token}`;
       }
 
-      const response = await fetch(`${API_BASE_URL}/api/upload`, {
+      const response = await fetch(`${baseURL}/api/upload`, {
         method: 'POST',
         headers,
         body: formData,
@@ -238,7 +241,7 @@ export default function RichTextEditor({ content, onChange }: RichTextEditorProp
 
       const data = await response.json();
       if (data.url) {
-        const fullUrl = `${API_BASE_URL}${data.url}`;
+        const fullUrl = `${baseURL}${data.url}`;
         editor?.chain().focus().setImage({ 
           src: fullUrl,
           alt: '',
