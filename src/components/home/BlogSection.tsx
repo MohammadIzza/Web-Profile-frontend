@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Calendar } from 'lucide-react';
 import EmptyState from '../EmptyState';
+import HorizontalScrollSection from './HorizontalScrollSection';
 import type { Blog } from '../../types';
 
 interface BlogSectionProps {
@@ -15,14 +16,7 @@ interface BlogSectionProps {
 export default function BlogSection({ blogs, loading }: BlogSectionProps) {
   if (loading) {
     return (
-      <div 
-        className="w-full horizontal-scroll scrollbar-hide touch-pan-x"
-        style={{ 
-          WebkitOverflowScrolling: 'touch',
-          scrollBehavior: 'smooth',
-          overscrollBehaviorX: 'contain'
-        }}
-      >
+      <div className="w-full overflow-x-auto overflow-y-hidden scrollbar-hide">
         <div className="flex gap-2 sm:gap-3 lg:gap-4 min-w-max pb-4 px-2 sm:px-4">
           {[1, 2, 3].map((i) => (
             <Card key={i} className="bg-paper border-line flex-shrink-0 w-[240px] sm:w-[280px] lg:w-[320px]">
@@ -102,20 +96,34 @@ export default function BlogSection({ blogs, loading }: BlogSectionProps) {
   );
 
   return (
-    <div 
-      className="w-full horizontal-scroll scrollbar-hide touch-pan-x"
-      style={{ 
-        WebkitOverflowScrolling: 'touch',
-        scrollBehavior: 'smooth',
-        overscrollBehaviorX: 'contain'
-      }}
-    >
-      <div className="flex gap-2 sm:gap-3 lg:gap-4 min-w-max pb-4 px-2 sm:px-4">
-        {blogs.map((blog) => (
-          <BlogCard key={blog.id} blog={blog} />
-        ))}
+    <>
+      {/* Desktop: GSAP Horizontal Scroll */}
+      <div className="hidden lg:block">
+        <HorizontalScrollSection enabled={true}>
+          {blogs.map((blog) => (
+            <BlogCard key={blog.id} blog={blog} />
+          ))}
+        </HorizontalScrollSection>
       </div>
-    </div>
+      
+      {/* Mobile/Tablet: Native Horizontal Scroll */}
+      <div className="lg:hidden">
+        <div 
+          className="w-full overflow-x-auto overflow-y-hidden scrollbar-hide touch-pan-x"
+          style={{ 
+            WebkitOverflowScrolling: 'touch',
+            scrollBehavior: 'smooth',
+            overscrollBehaviorX: 'contain'
+          }}
+        >
+          <div className="flex gap-2 sm:gap-3 min-w-max pb-4 px-2 sm:px-4">
+            {blogs.map((blog) => (
+              <BlogCard key={blog.id} blog={blog} />
+            ))}
+          </div>
+        </div>
+      </div>
+    </>
   );
 }
 

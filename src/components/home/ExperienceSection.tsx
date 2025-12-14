@@ -2,6 +2,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Calendar } from 'lucide-react';
 import EmptyState from '../EmptyState';
+import HorizontalScrollSection from './HorizontalScrollSection';
 import type { Experience } from '../../types';
 
 interface ExperienceSectionProps {
@@ -78,13 +79,27 @@ export default function ExperienceSection({ experiences, loading }: ExperienceSe
   );
 
   return (
-    <div className="w-full overflow-x-auto overflow-y-hidden scrollbar-hide">
-      <div className="flex gap-4 sm:gap-6 min-w-max pb-4">
-        {experiences.map((exp, index) => (
-          <ExperienceCard key={exp.id} exp={exp} index={index} />
-        ))}
+    <>
+      {/* Desktop: GSAP Horizontal Scroll */}
+      <div className="hidden lg:block">
+        <HorizontalScrollSection enabled={true}>
+          {experiences.map((exp, index) => (
+            <ExperienceCard key={exp.id} exp={exp} index={index} />
+          ))}
+        </HorizontalScrollSection>
       </div>
-    </div>
+      
+      {/* Mobile/Tablet: Native Horizontal Scroll */}
+      <div className="lg:hidden">
+        <div className="w-full overflow-x-auto overflow-y-hidden scrollbar-hide touch-pan-x">
+          <div className="flex gap-4 sm:gap-6 min-w-max pb-4 px-2 sm:px-4">
+            {experiences.map((exp, index) => (
+              <ExperienceCard key={exp.id} exp={exp} index={index} />
+            ))}
+          </div>
+        </div>
+      </div>
+    </>
   );
 }
 

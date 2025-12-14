@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Star } from 'lucide-react';
 import EmptyState from '../EmptyState';
+import HorizontalScrollSection from './HorizontalScrollSection';
 import type { TechStack } from '../../types';
 
 interface TechStackSectionProps {
@@ -92,11 +93,23 @@ export default function TechStackSection({ techStacks, loading }: TechStackSecti
     .filter(Boolean);
 
   return (
-    <div className="w-full overflow-x-auto overflow-y-hidden scrollbar-hide">
-      <div className="flex gap-4 sm:gap-6 min-w-max pb-4">
-        {categoryCards}
+    <>
+      {/* Desktop: GSAP Horizontal Scroll */}
+      <div className="hidden lg:block">
+        <HorizontalScrollSection enabled={true}>
+          {categoryCards}
+        </HorizontalScrollSection>
       </div>
-    </div>
+      
+      {/* Mobile/Tablet: Native Horizontal Scroll */}
+      <div className="lg:hidden">
+        <div className="w-full overflow-x-auto overflow-y-hidden scrollbar-hide touch-pan-x">
+          <div className="flex gap-4 sm:gap-6 min-w-max pb-4 px-2 sm:px-4">
+            {categoryCards}
+          </div>
+        </div>
+      </div>
+    </>
   );
 }
 

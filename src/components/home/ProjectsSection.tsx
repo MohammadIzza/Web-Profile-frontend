@@ -5,6 +5,7 @@ import { Separator } from '@/components/ui/separator';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { ExternalLink, Github } from 'lucide-react';
 import EmptyState from '../EmptyState';
+import HorizontalScrollSection from './HorizontalScrollSection';
 import type { Portfolio } from '../../types';
 
 interface ProjectsSectionProps {
@@ -104,11 +105,23 @@ export default function ProjectsSection({ portfolios, loading }: ProjectsSection
 
   return (
     <TooltipProvider>
-      <div className="w-full overflow-x-auto overflow-y-hidden scrollbar-hide">
-        <div className="flex gap-4 sm:gap-6 lg:gap-8 min-w-max pb-4">
+      {/* Desktop: GSAP Horizontal Scroll */}
+      <div className="hidden lg:block">
+        <HorizontalScrollSection enabled={true}>
           {portfolios.map((portfolio) => (
             <ProjectCard key={portfolio.id} portfolio={portfolio} />
           ))}
+        </HorizontalScrollSection>
+      </div>
+      
+      {/* Mobile/Tablet: Native Horizontal Scroll */}
+      <div className="lg:hidden">
+        <div className="w-full overflow-x-auto overflow-y-hidden scrollbar-hide touch-pan-x">
+          <div className="flex gap-4 sm:gap-6 min-w-max pb-4 px-2 sm:px-4">
+            {portfolios.map((portfolio) => (
+              <ProjectCard key={portfolio.id} portfolio={portfolio} />
+            ))}
+          </div>
         </div>
       </div>
     </TooltipProvider>
