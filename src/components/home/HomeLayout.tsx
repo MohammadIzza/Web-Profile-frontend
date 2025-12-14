@@ -85,7 +85,7 @@ export default function HomeLayout({ children, onSectionChange }: HomeLayoutProp
         </aside>
 
         {/* Main Content */}
-        <main className="flex-1 lg:pl-20">
+        <main className="flex-1 lg:pl-20 overflow-x-hidden">
           {/* Mobile Header */}
           <header className="lg:hidden border-b border-line sticky top-0 bg-paper z-20 backdrop-blur-sm bg-paper/90">
             <div className="px-4 py-4 flex justify-between items-center">

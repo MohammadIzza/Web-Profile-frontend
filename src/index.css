@@ -82,5 +82,11 @@
   }
   body {
     @apply bg-background text-foreground font-serif;
+    overflow-x: hidden; /* Prevent horizontal scroll on body */
+  }
+  /* Ensure horizontal scroll containers work properly */
+  [class*="overflow-x-auto"] {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
   }
 }

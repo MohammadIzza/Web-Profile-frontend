@@ -228,10 +228,10 @@ export default function HorizontalRail({
 
                 {/* Content Panel */}
                 {isActive && (
-                  <div className="border-t border-line bg-paper">
-                    <div className="p-4 sm:p-6">
+                  <div className="border-t border-line bg-paper overflow-hidden">
+                    <div className="w-full">
                       {item.loading ? (
-                        <div className="py-8">
+                        <div className="p-4 sm:p-6 py-8">
                           <div className="animate-pulse space-y-4">
                             <div className="h-4 bg-line rounded w-3/4"></div>
                             <div className="h-4 bg-line rounded w-1/2"></div>
