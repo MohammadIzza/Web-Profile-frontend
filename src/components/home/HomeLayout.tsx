@@ -88,28 +88,16 @@ export default function HomeLayout({ children, onSectionChange }: HomeLayoutProp
         <main className="flex-1 lg:pl-20">
           {/* Mobile Header */}
           <header className="lg:hidden border-b border-line sticky top-0 bg-paper z-20 backdrop-blur-sm bg-paper/90">
-            <div className="px-4 py-4 flex justify-center items-center relative">
-              <nav className="flex gap-4 text-sm">
-                {navItems.map((item) => (
-                  <a
-                    key={item.href}
-                    href={item.href}
-                    onClick={(e) => {
-                      handleNavClick(e, item.sectionId);
-                      setMobileMenuOpen(false);
-                    }}
-                    className="text-ink/60 hover:text-ink transition-colors duration-200 font-medium"
-                  >
-                    {item.label}
-                  </a>
-                ))}
-              </nav>
+            <div className="px-4 py-4 flex justify-between items-center">
+              <div className="text-sm font-serif font-semibold text-ink">
+                Portfolio
+              </div>
               
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="absolute right-4 h-8 w-8 p-0"
+                className="h-8 w-8 p-0"
               >
                 {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
               </Button>
@@ -122,8 +110,8 @@ export default function HomeLayout({ children, onSectionChange }: HomeLayoutProp
                   className="fixed inset-0 bg-ink/10 z-30 lg:hidden"
                   onClick={() => setMobileMenuOpen(false)}
                 />
-                <nav className="absolute top-full left-0 right-0 lg:hidden border-t border-line bg-paper z-40">
-                  <div className="px-4 py-2 flex flex-col gap-1">
+                <nav className="absolute top-full left-0 right-0 lg:hidden border-t border-line bg-paper z-40 shadow-sm">
+                  <div className="px-4 py-3 flex flex-col gap-1">
                     {navItems.map((item) => (
                       <a 
                         key={item.href}
@@ -132,7 +120,7 @@ export default function HomeLayout({ children, onSectionChange }: HomeLayoutProp
                           handleNavClick(e, item.sectionId);
                           setMobileMenuOpen(false);
                         }}
-                        className="text-sm text-ink/60 hover:text-ink hover:bg-ink/5 px-3 py-2 rounded-md transition duration-200"
+                        className="text-sm text-ink/60 hover:text-ink hover:bg-ink/5 px-3 py-2.5 rounded-md transition duration-200 font-medium"
                       >
                         {item.label}
                       </a>

@@ -53,11 +53,11 @@ export default function HeroSection({ profile, loading }: HeroSectionProps) {
           )}
           
           {/* Contact Info */}
-          <div className="flex items-center justify-center gap-4 text-xs text-ink/60 font-sans">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 text-xs text-ink/60 font-sans">
             {profile.email && (
               <div className="flex items-center gap-1.5">
                 <Mail className="w-3.5 h-3.5" />
-                <span>{profile.email}</span>
+                <span className="break-all text-center">{profile.email}</span>
               </div>
             )}
             {profile.location && (

@@ -38,9 +38,9 @@ export default function ProjectsSection({ portfolios, loading }: ProjectsSection
   }
 
   const ProjectCard = ({ portfolio }: { portfolio: Portfolio }) => (
-    <Card className="bg-paper border-line hover:brightness-95 transition duration-200 group flex-shrink-0 w-[320px] lg:w-[400px]">
+    <Card className="bg-paper border-line hover:brightness-95 transition duration-200 group flex-shrink-0 w-full sm:w-[320px] lg:w-[400px]">
       {portfolio.image && (
-        <div className="h-64 lg:h-80 overflow-hidden">
+        <div className="h-48 sm:h-64 lg:h-80 overflow-hidden">
           <img 
             src={portfolio.image} 
             alt={portfolio.title}
@@ -65,7 +65,7 @@ export default function ProjectsSection({ portfolios, loading }: ProjectsSection
           ))}
         </div>
         <Separator className="mb-4 bg-line" />
-        <div className="flex gap-2">
+        <div className="flex flex-col sm:flex-row gap-2">
           {portfolio.link && (
             <Tooltip>
               <TooltipTrigger asChild>
@@ -112,8 +112,8 @@ export default function ProjectsSection({ portfolios, loading }: ProjectsSection
         </HorizontalScrollRail>
       </div>
 
-      {/* Mobile: Vertical Grid */}
-      <div className="grid sm:grid-cols-2 gap-6 lg:hidden">
+      {/* Mobile/Tablet: Vertical Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 lg:hidden">
         {portfolios.map((portfolio) => (
           <ProjectCard key={portfolio.id} portfolio={portfolio} />
         ))}

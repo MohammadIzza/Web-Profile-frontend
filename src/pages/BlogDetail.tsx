@@ -122,7 +122,7 @@ export default function BlogDetail() {
               {blog.title}
             </h1>
             
-            <div className="flex items-center gap-4 text-sm text-ink/60 mb-6">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4 text-sm text-ink/60 mb-6">
               <div className="flex items-center gap-1.5">
                 <Calendar className="w-4 h-4" />
                 <span>{new Date(blog.createdAt).toLocaleDateString('en-US', {

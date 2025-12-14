@@ -43,7 +43,7 @@ export default function TechStackSection({ techStacks, loading }: TechStackSecti
   };
 
   return (
-    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
       {['frontend', 'backend', 'tools', 'database', 'devops', 'other'].map((category) => {
         const categoryTechs = techStacks.filter(
           (tech) => tech.category.toLowerCase() === category
