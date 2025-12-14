@@ -56,10 +56,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = async (username: string, password: string): Promise<{ success: boolean; error?: string }> => {
     try {
+      console.log('🔐 Attempting login...', { baseURL, endpoint: `${baseURL}/api/auth/login` });
+      
       const response = await axios.post(`${baseURL}/api/auth/login`, {
         username,
         password,
       });
+
+      console.log('✅ Login response:', response.data);
 
       if (response.data.success) {
         const { accessToken, refreshToken, user } = response.data;
@@ -69,11 +73,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setIsAuthenticated(true);
         return { success: true };
       } else {
+        console.warn('⚠️ Login failed - no success flag:', response.data);
         return { success: false, error: response.data.error || 'Login failed' };
       }
     } catch (error: any) {
-      console.error('Login error:', error);
-      const errorMessage = error.response?.data?.error || 'Login failed. Please try again.';
+      console.error('❌ Login error:', error);
+      console.error('Error details:', {
+        message: error.message,
+        response: error.response?.data,
+        status: error.response?.status,
+        statusText: error.response?.statusText,
+      });
+      const errorMessage = error.response?.data?.error || error.message || 'Login failed. Please try again.';
       return { success: false, error: errorMessage };
     }
   };
