@@ -76,7 +76,7 @@ export default function HomeLayout({ children, onSectionChange }: HomeLayoutProp
                 key={item.href}
                 href={item.href}
                 onClick={(e) => handleNavClick(e, item.sectionId)}
-                className="writing-vertical text-xs font-medium text-ink/60 hover:text-ink transition-colors duration-200 cursor-pointer"
+                className="writing-vertical text-xs font-serif font-medium text-ink/60 hover:text-ink transition-colors duration-200 cursor-pointer"
               >
                 {item.label}
               </a>
@@ -120,7 +120,7 @@ export default function HomeLayout({ children, onSectionChange }: HomeLayoutProp
                           handleNavClick(e, item.sectionId);
                           setMobileMenuOpen(false);
                         }}
-                        className="text-sm text-ink/60 hover:text-ink hover:bg-ink/5 px-3 py-2.5 rounded-md transition duration-200 font-medium"
+                        className="text-sm font-serif text-ink/60 hover:text-ink hover:bg-ink/5 px-3 py-2.5 rounded-md transition duration-200 font-medium"
                       >
                         {item.label}
                       </a>

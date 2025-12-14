@@ -75,7 +75,7 @@ export default function BlogDetail() {
         <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center px-4">
           <div className="text-center">
             <h1 className="text-4xl font-serif font-semibold text-ink mb-4">Blog Not Found</h1>
-            <p className="text-ink/60 mb-8">
+            <p className="text-ink/60 mb-8 font-serif">
               The blog post you're looking for doesn't exist or has been removed.
             </p>
             <Button asChild className="border-line hover:bg-ink/5">
@@ -122,7 +122,7 @@ export default function BlogDetail() {
               {blog.title}
             </h1>
             
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4 text-sm text-ink/60 mb-6">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4 text-sm font-serif text-ink/60 mb-6">
               <div className="flex items-center gap-1.5">
                 <Calendar className="w-4 h-4" />
                 <span>{new Date(blog.createdAt).toLocaleDateString('en-US', {
@@ -148,7 +148,7 @@ export default function BlogDetail() {
             )}
 
             {blog.excerpt && (
-              <p className="text-lg text-ink/70 mb-6 leading-relaxed">
+              <p className="text-lg font-serif text-ink/70 mb-6 leading-relaxed">
                 {blog.excerpt}
               </p>
             )}
@@ -169,16 +169,16 @@ export default function BlogDetail() {
 
           {/* Blog Content */}
           <div 
-            className="prose prose-lg max-w-none 
+            className="prose prose-lg max-w-none font-serif
               prose-headings:font-serif prose-headings:text-ink prose-headings:font-semibold
-              prose-p:text-ink/80 prose-p:leading-relaxed
-              prose-a:text-ink prose-a:underline prose-a:underline-offset-2
-              prose-strong:text-ink prose-strong:font-semibold
-              prose-code:text-ink/80 prose-code:bg-ink/5 prose-code:px-1 prose-code:py-0.5 prose-code:rounded
-              prose-pre:bg-ink/5 prose-pre:border prose-pre:border-line
-              prose-blockquote:border-l-ink/20 prose-blockquote:text-ink/70
-              prose-ul:text-ink/80 prose-ol:text-ink/80
-              prose-li:text-ink/80
+              prose-p:text-ink/80 prose-p:leading-relaxed prose-p:font-serif
+              prose-a:text-ink prose-a:underline prose-a:underline-offset-2 prose-a:font-serif
+              prose-strong:text-ink prose-strong:font-semibold prose-strong:font-serif
+              prose-code:text-ink/80 prose-code:bg-ink/5 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:font-serif
+              prose-pre:bg-ink/5 prose-pre:border prose-pre:border-line prose-pre:font-serif
+              prose-blockquote:border-l-ink/20 prose-blockquote:text-ink/70 prose-blockquote:font-serif
+              prose-ul:text-ink/80 prose-ol:text-ink/80 prose-ul:font-serif prose-ol:font-serif
+              prose-li:text-ink/80 prose-li:font-serif
               prose-hr:border-line"
             dangerouslySetInnerHTML={{ __html: blog.content }}
           />

@@ -37,7 +37,7 @@ export default function HeroSection({ profile, loading }: HeroSectionProps) {
           
           {/* Title */}
           {profile.title && (
-            <p className="text-sm md:text-base text-ink/70 mb-4 font-sans">
+            <p className="text-sm md:text-base text-ink/70 mb-4 font-serif">
               {profile.title}
             </p>
           )}
@@ -47,13 +47,13 @@ export default function HeroSection({ profile, loading }: HeroSectionProps) {
           
           {/* Bio */}
           {profile.bio && (
-            <p className="text-sm text-ink/80 max-w-xl mx-auto mb-6 leading-relaxed font-sans">
+            <p className="text-sm text-ink/80 max-w-xl mx-auto mb-6 leading-relaxed font-serif">
               {profile.bio}
             </p>
           )}
           
           {/* Contact Info */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 text-xs text-ink/60 font-sans">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 text-xs text-ink/60 font-serif">
             {profile.email && (
               <div className="flex items-center gap-1.5">
                 <Mail className="w-3.5 h-3.5" />

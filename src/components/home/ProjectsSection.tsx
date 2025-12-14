@@ -51,7 +51,7 @@ export default function ProjectsSection({ portfolios, loading }: ProjectsSection
       <CardHeader className="pb-3">
         <CardTitle className="text-base font-serif font-semibold text-ink">{portfolio.title}</CardTitle>
         {portfolio.description && (
-          <CardDescription className="text-xs text-ink/60 line-clamp-2 mt-2">
+          <CardDescription className="text-xs font-serif text-ink/60 line-clamp-2 mt-2">
             {portfolio.description}
           </CardDescription>
         )}

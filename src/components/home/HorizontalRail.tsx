@@ -144,7 +144,7 @@ export default function HorizontalRail({
                       }`}>
                         {item.title}
                       </h3>
-                      <p className={`text-[10px] mt-0.5 transition-colors duration-200 ${
+                      <p className={`text-[10px] mt-0.5 font-serif transition-colors duration-200 ${
                         isActive ? 'text-ink/60' : 'text-ink/40'
                       }`}>
                         {item.description}
@@ -210,7 +210,7 @@ export default function HorizontalRail({
                       }`}>
                         {item.title}
                       </h3>
-                      <p className={`text-xs mt-0.5 transition-colors duration-200 ${
+                      <p className={`text-xs mt-0.5 font-serif transition-colors duration-200 ${
                         isActive ? 'text-ink/60' : 'text-ink/40'
                       }`}>
                         {item.description}

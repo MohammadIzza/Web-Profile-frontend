@@ -48,13 +48,13 @@ export default function ExperienceSection({ experiences, loading }: ExperienceSe
                   )}
                 </div>
                 <div className="ml-4 sm:ml-5">
-                  <p className="text-sm font-medium text-ink/80 mb-1 break-words">
+                  <p className="text-sm font-serif font-medium text-ink/80 mb-1 break-words">
                     {exp.company}
                     {exp.location && (
                       <span className="text-ink/50"> • {exp.location}</span>
                     )}
                   </p>
-                  <div className="flex items-center gap-2 text-xs text-ink/50 mb-3 flex-wrap">
+                  <div className="flex items-center gap-2 text-xs font-serif text-ink/50 mb-3 flex-wrap">
                     <Calendar className="w-3.5 h-3.5 flex-shrink-0" />
                     <span>
                       {new Date(exp.startDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
@@ -62,7 +62,7 @@ export default function ExperienceSection({ experiences, loading }: ExperienceSe
                       {exp.current ? 'Present' : new Date(exp.endDate!).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
                     </span>
                   </div>
-                  <p className="text-sm text-ink/70 leading-relaxed whitespace-pre-line break-words">
+                  <p className="text-sm font-serif text-ink/70 leading-relaxed whitespace-pre-line break-words">
                     {exp.description}
                   </p>
                 </div>

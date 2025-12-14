@@ -51,7 +51,7 @@ export default function BlogSection({ blogs, loading }: BlogSectionProps) {
             </div>
           )}
           <CardHeader className="pb-3">
-            <div className="flex items-center gap-2 text-xs text-ink/50 mb-2">
+            <div className="flex items-center gap-2 text-xs font-serif text-ink/50 mb-2">
               <Calendar className="w-3.5 h-3.5" />
               <span>{new Date(blog.createdAt).toLocaleDateString()}</span>
             </div>
@@ -59,7 +59,7 @@ export default function BlogSection({ blogs, loading }: BlogSectionProps) {
               {blog.title}
             </CardTitle>
             {blog.excerpt && (
-              <CardDescription className="text-xs text-ink/60 line-clamp-3 mt-2">
+              <CardDescription className="text-xs font-serif text-ink/60 line-clamp-3 mt-2">
                 {blog.excerpt}
               </CardDescription>
             )}
