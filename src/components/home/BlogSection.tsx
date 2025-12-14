@@ -51,15 +51,15 @@ export default function BlogSection({ blogs, loading }: BlogSectionProps) {
             </div>
           )}
           <CardHeader className="pb-3">
-            <div className="flex items-center gap-2 text-xs font-serif text-ink/50 mb-2">
+            <div className="flex items-center gap-2 text-sm font-serif text-ink/50 mb-2">
               <Calendar className="w-3.5 h-3.5" />
               <span>{new Date(blog.createdAt).toLocaleDateString()}</span>
             </div>
-            <CardTitle className="text-base font-serif font-semibold text-ink line-clamp-2 group-hover:text-ink/80 transition-colors">
+            <CardTitle className="text-lg font-serif font-semibold text-ink line-clamp-2 group-hover:text-ink/80 transition-colors">
               {blog.title}
             </CardTitle>
             {blog.excerpt && (
-              <CardDescription className="text-xs font-serif text-ink/60 line-clamp-3 mt-2">
+              <CardDescription className="text-sm font-serif text-ink/60 line-clamp-3 mt-2">
                 {blog.excerpt}
               </CardDescription>
             )}
@@ -67,7 +67,7 @@ export default function BlogSection({ blogs, loading }: BlogSectionProps) {
           <CardContent>
             <div className="flex flex-wrap gap-1.5 mb-4">
               {blog.tags.slice(0, 3).map((tag, i) => (
-                <Badge key={i} variant="outline" className="text-xs h-5 px-2 bg-ink/5 text-ink/60 border-line">
+                <Badge key={i} variant="outline" className="text-sm h-5 px-2 bg-ink/5 text-ink/60 border-line">
                   {tag}
                 </Badge>
               ))}
@@ -76,7 +76,7 @@ export default function BlogSection({ blogs, loading }: BlogSectionProps) {
             <Button 
               variant="ghost" 
               size="sm" 
-              className="h-8 text-xs w-full hover:bg-ink/5"
+              className="h-8 text-sm w-full hover:bg-ink/5"
               asChild
             >
               <Link to={`/blog/${blog.slug}`}>

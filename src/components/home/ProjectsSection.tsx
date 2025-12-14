@@ -49,9 +49,9 @@ export default function ProjectsSection({ portfolios, loading }: ProjectsSection
         </div>
       )}
       <CardHeader className="pb-3">
-        <CardTitle className="text-base font-serif font-semibold text-ink">{portfolio.title}</CardTitle>
+        <CardTitle className="text-lg font-serif font-semibold text-ink">{portfolio.title}</CardTitle>
         {portfolio.description && (
-          <CardDescription className="text-xs font-serif text-ink/60 line-clamp-2 mt-2">
+          <CardDescription className="text-sm font-serif text-ink/60 line-clamp-2 mt-2">
             {portfolio.description}
           </CardDescription>
         )}
@@ -59,7 +59,7 @@ export default function ProjectsSection({ portfolios, loading }: ProjectsSection
       <CardContent>
         <div className="flex flex-wrap gap-1.5 mb-4">
           {portfolio.tags.map((tag, i) => (
-            <Badge key={i} variant="secondary" className="text-xs h-5 px-2 bg-ink/5 text-ink/60 border-line">
+            <Badge key={i} variant="secondary" className="text-sm h-5 px-2 bg-ink/5 text-ink/60 border-line">
               {tag}
             </Badge>
           ))}
@@ -69,7 +69,7 @@ export default function ProjectsSection({ portfolios, loading }: ProjectsSection
           {portfolio.link && (
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button variant="outline" size="sm" className="h-8 text-xs flex-1 border-line hover:bg-ink/5" asChild>
+                <Button variant="outline" size="sm" className="h-8 text-sm flex-1 border-line hover:bg-ink/5" asChild>
                   <a href={portfolio.link} target="_blank" rel="noopener noreferrer">
                     <ExternalLink className="w-3.5 h-3.5 mr-1" />
                     Demo
@@ -84,7 +84,7 @@ export default function ProjectsSection({ portfolios, loading }: ProjectsSection
           {portfolio.github && (
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button variant="outline" size="sm" className="h-8 text-xs flex-1 border-line hover:bg-ink/5" asChild>
+                <Button variant="outline" size="sm" className="h-8 text-sm flex-1 border-line hover:bg-ink/5" asChild>
                   <a href={portfolio.github} target="_blank" rel="noopener noreferrer">
                     <Github className="w-3.5 h-3.5 mr-1" />
                     Code

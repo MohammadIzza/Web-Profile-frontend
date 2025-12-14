@@ -76,7 +76,7 @@ export default function FooterSection({ profile }: FooterSectionProps) {
           
           {/* Copyright */}
           <div className="text-center sm:text-right">
-            <p className="text-xs font-serif text-ink/50">
+            <p className="text-sm font-serif text-ink/50">
               © {new Date().getFullYear()} {profile?.name || 'Portfolio'}
             </p>
           </div>

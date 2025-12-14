@@ -53,7 +53,7 @@ export default function TechStackSection({ techStacks, loading }: TechStackSecti
         return (
           <Card key={category} className="bg-paper border-line">
             <CardHeader className="pb-3">
-              <CardTitle className="text-base font-serif font-semibold text-ink capitalize">
+              <CardTitle className="text-lg font-serif font-semibold text-ink capitalize">
                 {category}
               </CardTitle>
             </CardHeader>
@@ -65,7 +65,7 @@ export default function TechStackSection({ techStacks, loading }: TechStackSecti
                       {tech.icon && (
                         <span className="text-lg">{tech.icon}</span>
                       )}
-                      <span className="text-sm font-serif font-medium text-ink/80">
+                      <span className="text-base font-serif font-medium text-ink/80">
                         {tech.name}
                       </span>
                     </div>

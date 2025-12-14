@@ -76,7 +76,7 @@ export default function HomeLayout({ children, onSectionChange }: HomeLayoutProp
                 key={item.href}
                 href={item.href}
                 onClick={(e) => handleNavClick(e, item.sectionId)}
-                className="writing-vertical text-xs font-serif font-medium text-ink/60 hover:text-ink transition-colors duration-200 cursor-pointer"
+                className="writing-vertical text-sm font-serif font-medium text-ink/60 hover:text-ink transition-colors duration-200 cursor-pointer"
               >
                 {item.label}
               </a>
@@ -89,7 +89,7 @@ export default function HomeLayout({ children, onSectionChange }: HomeLayoutProp
           {/* Mobile Header */}
           <header className="lg:hidden border-b border-line sticky top-0 bg-paper z-20 backdrop-blur-sm bg-paper/90">
             <div className="px-4 py-4 flex justify-between items-center">
-              <div className="text-sm font-serif font-semibold text-ink">
+              <div className="text-base font-serif font-semibold text-ink">
                 Portfolio
               </div>
               
@@ -120,7 +120,7 @@ export default function HomeLayout({ children, onSectionChange }: HomeLayoutProp
                           handleNavClick(e, item.sectionId);
                           setMobileMenuOpen(false);
                         }}
-                        className="text-sm font-serif text-ink/60 hover:text-ink hover:bg-ink/5 px-3 py-2.5 rounded-md transition duration-200 font-medium"
+                        className="text-base font-serif text-ink/60 hover:text-ink hover:bg-ink/5 px-3 py-2.5 rounded-md transition duration-200 font-medium"
                       >
                         {item.label}
                       </a>

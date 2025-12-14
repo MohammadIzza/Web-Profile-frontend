@@ -139,12 +139,12 @@ export default function HorizontalRail({
                       isActive ? 'text-ink' : 'text-ink/40'
                     }`} />
                     <div className="text-center">
-                      <h3 className={`text-xs font-serif font-semibold transition-colors duration-200 ${
+                      <h3 className={`text-sm font-serif font-semibold transition-colors duration-200 ${
                         isActive ? 'text-ink' : 'text-ink/60'
                       }`}>
                         {item.title}
                       </h3>
-                      <p className={`text-[10px] mt-0.5 font-serif transition-colors duration-200 ${
+                      <p className={`text-xs mt-0.5 font-serif transition-colors duration-200 ${
                         isActive ? 'text-ink/60' : 'text-ink/40'
                       }`}>
                         {item.description}
@@ -205,12 +205,12 @@ export default function HorizontalRail({
                       isActive ? 'text-ink' : 'text-ink/40'
                     }`} />
                     <div className="text-left">
-                      <h3 className={`text-sm font-serif font-semibold transition-colors duration-200 ${
+                      <h3 className={`text-base font-serif font-semibold transition-colors duration-200 ${
                         isActive ? 'text-ink' : 'text-ink/60'
                       }`}>
                         {item.title}
                       </h3>
-                      <p className={`text-xs mt-0.5 font-serif transition-colors duration-200 ${
+                      <p className={`text-sm mt-0.5 font-serif transition-colors duration-200 ${
                         isActive ? 'text-ink/60' : 'text-ink/40'
                       }`}>
                         {item.description}
