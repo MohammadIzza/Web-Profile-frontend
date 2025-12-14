@@ -40,9 +40,9 @@ export default function BlogSection({ blogs, loading }: BlogSectionProps) {
   return (
     <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4 lg:gap-6">
       {blogs.map((blog) => (
-        <Card key={blog.id} className="bg-paper border-line hover:brightness-95 transition duration-200 group">
+        <Card key={blog.id} className="bg-paper border-line hover:brightness-95 transition duration-200 group flex flex-col max-h-[320px] sm:max-h-[380px] lg:max-h-[420px]">
           {blog.image && (
-            <div className="h-24 sm:h-32 lg:h-40 overflow-hidden">
+            <div className="h-24 sm:h-32 lg:h-40 overflow-hidden flex-shrink-0">
               <img 
                 src={blog.image} 
                 alt={blog.title}
@@ -50,7 +50,7 @@ export default function BlogSection({ blogs, loading }: BlogSectionProps) {
               />
             </div>
           )}
-          <CardHeader className="p-3 sm:p-4 lg:p-6 pb-2 sm:pb-3">
+          <CardHeader className="p-3 sm:p-4 lg:p-6 pb-2 sm:pb-3 flex-shrink-0">
             <div className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm font-serif text-ink/50 mb-1 sm:mb-2">
               <Calendar className="w-3 h-3 sm:w-3.5 sm:h-3.5 flex-shrink-0" />
               <span className="truncate">{new Date(blog.createdAt).toLocaleDateString()}</span>
@@ -64,7 +64,7 @@ export default function BlogSection({ blogs, loading }: BlogSectionProps) {
               </CardDescription>
             )}
           </CardHeader>
-          <CardContent className="p-3 sm:p-4 lg:p-6 pt-0">
+          <CardContent className="p-3 sm:p-4 lg:p-6 pt-0 flex-1 flex flex-col justify-end">
             <div className="flex flex-wrap gap-1 sm:gap-1.5 mb-2 sm:mb-4">
               {blog.tags.slice(0, 2).map((tag, i) => (
                 <Badge key={i} variant="outline" className="text-[10px] sm:text-xs lg:text-sm h-4 sm:h-5 px-1.5 sm:px-2 bg-ink/5 text-ink/60 border-line">
