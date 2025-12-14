@@ -75,21 +75,14 @@ export default function Home() {
         <div className="min-h-screen bg-white">
         {/* Header/Navigation */}
         <header className="border-b border-gray-200 sticky top-0 bg-white z-20 backdrop-blur-sm bg-white/90">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex justify-between items-center">
-            <div className="flex items-center gap-2 sm:gap-3">
-              <img src="/logo.svg" alt="Logo" className="h-6 w-6 sm:h-8 sm:w-8" />
-              <h1 className="text-base sm:text-lg font-semibold text-black">
-                {loading ? <Skeleton className="h-5 w-24" /> : profile?.name || 'Portfolio'}
-              </h1>
-            </div>
-            
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4 flex justify-center items-center relative">
             {/* Desktop Navigation */}
-            <nav className="hidden md:flex gap-4 lg:gap-6 text-sm">
-              <a href="#projects" className="text-gray-700 hover:text-black transition">Projects</a>
-              <a href="#experience" className="text-gray-700 hover:text-black transition">Experience</a>
-              <a href="#techstack" className="text-gray-700 hover:text-black transition">Tech Stack</a>
-              <a href="#blog" className="text-gray-700 hover:text-black transition">Blog</a>
-              <a href="#contact" className="text-gray-700 hover:text-black transition">Contact</a>
+            <nav className="hidden md:flex gap-6 lg:gap-8 text-sm">
+              <a href="#projects" className="text-gray-700 hover:text-black transition-colors font-medium">Projects</a>
+              <a href="#experience" className="text-gray-700 hover:text-black transition-colors font-medium">Experience</a>
+              <a href="#techstack" className="text-gray-700 hover:text-black transition-colors font-medium">Tech Stack</a>
+              <a href="#blog" className="text-gray-700 hover:text-black transition-colors font-medium">Blog</a>
+              <a href="#contact" className="text-gray-700 hover:text-black transition-colors font-medium">Contact</a>
             </nav>
             
             {/* Mobile Menu Button */}
@@ -97,7 +90,7 @@ export default function Home() {
               variant="ghost"
               size="sm"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden h-8 w-8 p-0"
+              className="md:hidden absolute right-4 h-8 w-8 p-0"
             >
               {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </Button>
