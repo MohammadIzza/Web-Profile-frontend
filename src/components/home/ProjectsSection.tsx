@@ -16,19 +16,21 @@ interface ProjectsSectionProps {
 export default function ProjectsSection({ portfolios, loading }: ProjectsSectionProps) {
   if (loading) {
     return (
-      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-        {[1, 2, 3].map((i) => (
-          <Card key={i} className="bg-paper border-line">
-            <div className="h-64 bg-line/30 animate-pulse" />
-            <CardHeader>
-              <div className="h-5 w-3/4 bg-line/30 rounded animate-pulse" />
-            </CardHeader>
-            <CardContent>
-              <div className="h-4 w-full bg-line/30 rounded animate-pulse mb-2" />
-              <div className="h-4 w-2/3 bg-line/30 rounded animate-pulse" />
-            </CardContent>
-          </Card>
-        ))}
+      <div className="w-full overflow-x-auto overflow-y-hidden scrollbar-hide">
+        <div className="flex gap-4 sm:gap-6 lg:gap-8 min-w-max pb-4">
+          {[1, 2, 3].map((i) => (
+            <Card key={i} className="bg-paper border-line flex-shrink-0 w-[280px] sm:w-[320px] lg:w-[400px]">
+              <div className="h-48 sm:h-64 lg:h-80 bg-line/30 animate-pulse" />
+              <CardHeader>
+                <div className="h-5 w-3/4 bg-line/30 rounded animate-pulse" />
+              </CardHeader>
+              <CardContent>
+                <div className="h-4 w-full bg-line/30 rounded animate-pulse mb-2" />
+                <div className="h-4 w-2/3 bg-line/30 rounded animate-pulse" />
+              </CardContent>
+            </Card>
+          ))}
+        </div>
       </div>
     );
   }
@@ -38,7 +40,7 @@ export default function ProjectsSection({ portfolios, loading }: ProjectsSection
   }
 
   const ProjectCard = ({ portfolio }: { portfolio: Portfolio }) => (
-    <Card className="bg-paper border-line hover:brightness-95 transition duration-200 group flex-shrink-0 w-full sm:w-[320px] lg:w-[400px]">
+    <Card className="bg-paper border-line hover:brightness-95 transition duration-200 group flex-shrink-0 w-[280px] sm:w-[320px] lg:w-[400px]">
       {portfolio.image && (
         <div className="h-48 sm:h-64 lg:h-80 overflow-hidden">
           <img 
@@ -103,20 +105,12 @@ export default function ProjectsSection({ portfolios, loading }: ProjectsSection
 
   return (
     <TooltipProvider>
-      {/* Desktop: Horizontal Scroll */}
-      <div className="hidden lg:block">
-        <HorizontalScrollRail>
+      <div className="w-full overflow-x-auto overflow-y-hidden scrollbar-hide">
+        <div className="flex gap-4 sm:gap-6 lg:gap-8 min-w-max pb-4">
           {portfolios.map((portfolio) => (
             <ProjectCard key={portfolio.id} portfolio={portfolio} />
           ))}
-        </HorizontalScrollRail>
-      </div>
-
-      {/* Mobile/Tablet: Vertical Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 lg:hidden">
-        {portfolios.map((portfolio) => (
-          <ProjectCard key={portfolio.id} portfolio={portfolio} />
-        ))}
+        </div>
       </div>
     </TooltipProvider>
   );
