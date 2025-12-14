@@ -12,7 +12,14 @@ export default {
   			md: 'calc(var(--radius) - 2px)',
   			sm: 'calc(var(--radius) - 4px)'
   		},
+  		fontFamily: {
+  			serif: ['Cormorant Garamond', 'serif'],
+  			sans: ['Inter', 'ui-sans-serif', 'system-ui'],
+  		},
   		colors: {
+  			paper: '#efefea',
+  			ink: '#111111',
+  			line: '#d6d6cf',
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {

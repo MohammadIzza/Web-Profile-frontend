@@ -1,0 +1,80 @@
+import { Card, CardContent } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Calendar } from 'lucide-react';
+import EmptyState from '../EmptyState';
+import type { Experience } from '../../types';
+
+interface ExperienceSectionProps {
+  experiences: Experience[];
+  loading: boolean;
+}
+
+export default function ExperienceSection({ experiences, loading }: ExperienceSectionProps) {
+  if (loading) {
+    return (
+      <div className="space-y-6">
+        {[1, 2].map((i) => (
+          <Card key={i} className="bg-paper border-line">
+            <CardContent className="pt-6">
+              <div className="h-6 w-48 bg-line/30 rounded animate-pulse mb-2" />
+              <div className="h-5 w-64 bg-line/30 rounded animate-pulse mb-4" />
+              <div className="h-4 w-full bg-line/30 rounded animate-pulse mb-2" />
+              <div className="h-4 w-3/4 bg-line/30 rounded animate-pulse" />
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+    );
+  }
+
+  if (experiences.length === 0) {
+    return <EmptyState type="general" message="No work experience added yet." />;
+  }
+
+  return (
+    <div className="space-y-6">
+      {experiences.map((exp, index) => (
+        <Card key={exp.id} className="bg-paper border-line hover:brightness-95 transition duration-200">
+          <CardContent className="pt-6">
+            <div className="flex items-start justify-between">
+              <div className="flex-1">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="w-2 h-2 rounded-full bg-ink"></div>
+                  <h4 className="text-lg font-serif font-semibold text-ink">{exp.position}</h4>
+                  {exp.current && (
+                    <Badge variant="default" className="text-xs bg-ink text-paper">Current</Badge>
+                  )}
+                </div>
+                <div className="ml-5">
+                  <p className="text-sm font-medium text-ink/80 mb-1">
+                    {exp.company}
+                    {exp.location && (
+                      <span className="text-ink/50"> • {exp.location}</span>
+                    )}
+                  </p>
+                  <div className="flex items-center gap-2 text-xs text-ink/50 mb-3">
+                    <Calendar className="w-3.5 h-3.5" />
+                    <span>
+                      {new Date(exp.startDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
+                      {' - '}
+                      {exp.current ? 'Present' : new Date(exp.endDate!).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
+                    </span>
+                  </div>
+                  <p className="text-sm text-ink/70 leading-relaxed whitespace-pre-line">
+                    {exp.description}
+                  </p>
+                </div>
+              </div>
+            </div>
+            {index < experiences.length - 1 && (
+              <div className="mt-6 ml-5">
+                <div className="w-0.5 h-6 bg-line"></div>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      ))}
+    </div>
+  );
+}
+
