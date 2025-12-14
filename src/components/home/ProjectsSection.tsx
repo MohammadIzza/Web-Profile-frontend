@@ -5,7 +5,6 @@ import { Separator } from '@/components/ui/separator';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { ExternalLink, Github } from 'lucide-react';
 import EmptyState from '../EmptyState';
-import HorizontalScrollRail from './HorizontalScrollRail';
 import type { Portfolio } from '../../types';
 
 interface ProjectsSectionProps {
