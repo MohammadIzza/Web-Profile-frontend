@@ -20,30 +20,30 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: (id) => {
-          // Vendor chunks
+          // Vendor chunks - simplified to avoid circular dependencies
           if (id.includes('node_modules')) {
-            // React vendor
-            if (id.includes('react') || id.includes('react-dom') || id.includes('react-router')) {
-              return 'react-vendor';
-            }
-            
-            // GSAP vendor
+            // Large libraries that can be split
             if (id.includes('gsap')) {
               return 'gsap-vendor';
             }
             
-            // Radix UI vendor
+            // Keep React together to avoid circular deps
+            if (id.includes('react') || id.includes('react-dom') || id.includes('react-router')) {
+              return 'react-vendor';
+            }
+            
+            // Radix UI
             if (id.includes('@radix-ui')) {
               return 'ui-vendor';
             }
             
-            // Tiptap vendor (but exclude @tiptap/pm to avoid resolution issues)
+            // Tiptap (exclude problematic packages)
             if (id.includes('@tiptap') && !id.includes('@tiptap/pm')) {
               return 'editor-vendor';
             }
             
-            // Other node_modules go to vendor chunk
-            return 'vendor';
+            // Let Vite handle the rest automatically
+            return null;
           }
         },
       },
