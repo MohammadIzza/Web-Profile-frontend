@@ -15,8 +15,15 @@ interface BlogSectionProps {
 export default function BlogSection({ blogs, loading }: BlogSectionProps) {
   if (loading) {
     return (
-      <div className="w-full overflow-x-auto overflow-y-hidden scrollbar-hide touch-pan-x" style={{ WebkitOverflowScrolling: 'touch' }}>
-        <div className="flex gap-2 sm:gap-3 lg:gap-4 min-w-max pb-4">
+      <div 
+        className="w-full horizontal-scroll scrollbar-hide touch-pan-x"
+        style={{ 
+          WebkitOverflowScrolling: 'touch',
+          scrollBehavior: 'smooth',
+          overscrollBehaviorX: 'contain'
+        }}
+      >
+        <div className="flex gap-2 sm:gap-3 lg:gap-4 min-w-max pb-4 px-2 sm:px-4">
           {[1, 2, 3].map((i) => (
             <Card key={i} className="bg-paper border-line flex-shrink-0 w-[240px] sm:w-[280px] lg:w-[320px]">
               <div className="h-24 sm:h-32 lg:h-40 bg-line/30 animate-pulse" />
@@ -95,8 +102,15 @@ export default function BlogSection({ blogs, loading }: BlogSectionProps) {
   );
 
   return (
-    <div className="w-full overflow-x-auto overflow-y-hidden scrollbar-hide touch-pan-x" style={{ WebkitOverflowScrolling: 'touch' }}>
-      <div className="flex gap-2 sm:gap-3 lg:gap-4 min-w-max pb-4">
+    <div 
+      className="w-full horizontal-scroll scrollbar-hide touch-pan-x"
+      style={{ 
+        WebkitOverflowScrolling: 'touch',
+        scrollBehavior: 'smooth',
+        overscrollBehaviorX: 'contain'
+      }}
+    >
+      <div className="flex gap-2 sm:gap-3 lg:gap-4 min-w-max pb-4 px-2 sm:px-4">
         {blogs.map((blog) => (
           <BlogCard key={blog.id} blog={blog} />
         ))}

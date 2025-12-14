@@ -155,9 +155,9 @@ export default function HorizontalRail({
                   {/* Content Panel */}
                   {isActive && (
                     <div className="w-[800px] max-w-full border-t border-line bg-paper">
-                      <div className="p-8 max-h-[70vh] overflow-y-auto scrollbar-hide">
+                      <div className="max-h-[70vh] overflow-y-auto overflow-x-visible scrollbar-hide">
                         {item.loading ? (
-                          <div className="py-8">
+                          <div className="p-8 py-8">
                             <div className="animate-pulse space-y-4">
                               <div className="h-4 bg-line rounded w-3/4"></div>
                               <div className="h-4 bg-line rounded w-1/2"></div>
@@ -228,8 +228,8 @@ export default function HorizontalRail({
 
                 {/* Content Panel */}
                 {isActive && (
-                  <div className="border-t border-line bg-paper overflow-hidden">
-                    <div className="w-full">
+                  <div className="border-t border-line bg-paper overflow-visible">
+                    <div className="w-full overflow-visible">
                       {item.loading ? (
                         <div className="p-4 sm:p-6 py-8">
                           <div className="animate-pulse space-y-4">

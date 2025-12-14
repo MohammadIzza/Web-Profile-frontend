@@ -88,5 +88,27 @@
   [class*="overflow-x-auto"] {
     -webkit-overflow-scrolling: touch;
     scroll-behavior: smooth;
+    overscroll-behavior-x: contain;
+  }
+}
+
+@layer utilities {
+  /* Force horizontal scroll to work */
+  .horizontal-scroll {
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+    overscroll-behavior-x: contain;
+    will-change: scroll-position;
+  }
+  
+  .horizontal-scroll::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .horizontal-scroll {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
 }
